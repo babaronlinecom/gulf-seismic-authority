@@ -1,12 +1,12 @@
 // Gulf Seismic Saudi/GCC Expansion — data models
-// SQLite. Primitives only (no lists). JSON stored as String.
+// PostgreSQL (Neon). Primitives only (no lists). JSON stored as String.
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 

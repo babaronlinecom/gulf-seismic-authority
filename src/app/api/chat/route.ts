@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getZai } from "@/lib/zai";
+import { zaiChat, NOT_CONFIGURED_REPLY, type ZaiChatMessage } from "@/lib/zai";
 
 export const runtime = "nodejs";
 
@@ -24,19 +24,24 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: "messages required" }, { status: 400 });
     }
 
-    const zai = await getZai();
-    const completion = await zai.chat.completions.create({
-      messages: [
-        { role: "assistant", content: SYSTEM },
-        ...messages.map((m: { role: string; content: string }) => ({
-          role: m.role === "assistant" ? "assistant" : "user",
-          content: m.content,
-        })),
-      ],
-      thinking: { type: "disabled" as const },
-    });
+    const history: ZaiChatMessage[] = messages.map(
+      (m: { role: string; content: string }) => ({
+        role: m.role === "assistant" ? "assistant" : "user",
+        content: m.content,
+      })
+    );
 
-    const reply = completion.choices?.[0]?.message?.content || "";
+    let reply: string;
+    try {
+      reply = await zaiChat([{ role: "assistant", content: SYSTEM }, ...history]);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Unknown error";
+      if (msg === "ZAI_NOT_CONFIGURED") {
+        return NextResponse.json({ ok: true, reply: NOT_CONFIGURED_REPLY, notConfigured: true });
+      }
+      throw e;
+    }
+
     return NextResponse.json({ ok: true, reply });
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : "Unknown error";

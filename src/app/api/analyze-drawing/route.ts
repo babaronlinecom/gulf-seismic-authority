@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getZai } from "@/lib/zai";
+import { zaiVision, NOT_CONFIGURED_REPLY } from "@/lib/zai";
 
 export const runtime = "nodejs";
 
@@ -23,21 +23,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: "Valid image data URL required" }, { status: 400 });
     }
 
-    const zai = await getZai();
-    const response = await zai.chat.completions.createVision({
-      messages: [
-        {
-          role: "user",
-          content: [
-            { type: "text", text: PROMPT },
-            { type: "image_url", image_url: { url: dataUrl } },
-          ],
-        },
-      ],
-      thinking: { type: "disabled" as const },
-    });
+    let analysis: string;
+    try {
+      analysis = await zaiVision(PROMPT, dataUrl);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Unknown error";
+      if (msg === "ZAI_NOT_CONFIGURED") {
+        return NextResponse.json({ ok: true, analysis: NOT_CONFIGURED_REPLY, notConfigured: true });
+      }
+      throw e;
+    }
 
-    const analysis = response.choices?.[0]?.message?.content || "";
     return NextResponse.json({ ok: true, analysis });
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : "Unknown error";
