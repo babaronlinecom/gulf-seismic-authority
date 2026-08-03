@@ -13,21 +13,26 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
-        const user = await db.adminUser.findUnique({
-          where: { email: credentials.email.toLowerCase() },
-        });
-        if (!user) return null;
-        const valid = await bcrypt.compare(
-          credentials.password,
+        try {
+          const user = await db.adminUser.findUnique({
+            where: { email: credentials.email.toLowerCase() },
+          });
+          if (!user) return null;
+          const valid = await bcrypt.compare(
+            credentials.password,
           user.passwordHash
-        );
-        if (!valid) return null;
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          role: user.role,
-        };
+          );
+          if (!valid) return null;
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+          };
+        } catch (err) {
+          console.error("[auth] Authorize error:", err);
+          return null;
+        }
       },
     }),
   ],
