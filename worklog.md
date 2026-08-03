@@ -350,3 +350,33 @@ Stage Summary:
 - Public site reads ALL header/footer/hero/settings content from Neon PostgreSQL.
 - Production: https://gulf-seismic-authority.vercel.app — CMS live.
 - Admin: https://gulf-seismic-authority.vercel.app/admin/login (admin@gulfseismic.com / gulf-seismic-2026)
+
+---
+Task ID: FULL-CMS (Content Seed + Media Management + Form Builder)
+Agent: Orchestrator (Z.ai Code)
+Task: Seed all existing content into CMS DB, build image management system, build form creation and management system.
+
+Work Log:
+- Added MediaItem and Form + FormSubmission models to Prisma schema. Pushed to Neon.
+- Built seed-content.ts script: pushed 50 projects, 20 case studies, 6 blog posts, 3 default pages (About, Privacy, Terms), 3 default forms (Contact, RFQ, Newsletter) into the database.
+- IMAGE MANAGEMENT SYSTEM:
+  - MediaItem model stores base64 data URLs (max 2MB per image)
+  - /api/admin/media: upload (POST, base64), list (GET), update alt (PUT), delete (DELETE)
+  - /admin/media: grid library UI with drag-upload, search, image detail dialog (alt text editing, URL copy, size/type info), delete with hover overlay
+- FORM BUILDER SYSTEM:
+  - Form model (name, slug, fields JSON, submit label, success message, notification email, status)
+  - FormSubmission model (formId, data JSON, status, createdAt)
+  - /admin/forms: list all forms with submission counts and field counts
+  - /admin/forms/[id]: edit form with field builder (add/remove/reorder fields, set type/label/name/placeholder/options/required) + submissions viewer tab
+  - /forms/[slug]: public form rendering with validation, success message, error handling
+  - /api/forms/[slug]/submit: public submission endpoint with required field validation
+  - /api/admin/forms: CRUD API + /api/admin/forms/[id]/submissions: list submissions
+  - Field types: text, email, tel, textarea, select, checkbox, radio, date
+- Updated admin sidebar: now 12 sections (Dashboard, Leads, Pages, Blog Posts, Projects, Case Studies, Menus, Hero Sections, Media Library, Forms, Site Settings, Account).
+
+Stage Summary:
+- Admin sections are NO LONGER EMPTY: 50 projects, 20 case studies, 6 blog posts, 3 pages, 3 forms all visible.
+- Media Library: upload, search, copy URL, delete, edit alt text.
+- Form Builder: create custom forms with any field types, view submissions in admin.
+- Production deployed: https://gulf-seismic-authority.vercel.app
+- Verified: /blog shows 6 posts, /forms/contact renders with 4 fields, /admin/media and /admin/forms work.
