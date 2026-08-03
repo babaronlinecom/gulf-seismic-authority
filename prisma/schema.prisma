@@ -1,13 +1,12 @@
 // Gulf Seismic — data models
-// Provider is set via env so local dev uses SQLite and production uses PostgreSQL (Neon).
-// To use PostgreSQL locally, set provider="postgresql" and DATABASE_URL to a Neon string.
+// Production: PostgreSQL (Neon). Local dev: also PostgreSQL via DATABASE_URL env.
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
