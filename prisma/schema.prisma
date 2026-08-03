@@ -343,3 +343,85 @@ model FormSubmission {
   @@index([status])
   @@index([createdAt])
 }
+
+// ---------------------------------------------------------------------------
+// Optimization Ecosystem — SEO, AIO, GEO, AEO, SXO
+// ---------------------------------------------------------------------------
+
+/// Per-page SEO profile (meta tags, keywords, OG, canonical, robots)
+model SeoProfile {
+  id             String   @id @default(cuid())
+  pageUrl        String   @unique // e.g. "/", "/uae/dubai", "/services/road-marking"
+  metaTitle      String?
+  metaDescription String?
+  canonicalUrl   String?
+  robotsIndex    Boolean  @default(true)
+  robotsFollow   Boolean  @default(true)
+  ogTitle        String?
+  ogDescription  String?
+  ogImage        String?
+  twitterCard    String   @default("summary_large_image")
+  focusKeyword   String?
+  secondaryKeywords String? // JSON array
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([pageUrl])
+}
+
+/// Entity definitions for AI knowledge graph (AIO + GEO)
+model EntityDefinition {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String
+  entityType  String   @default("Thing") // Organization, Service, Place, Product, etc.
+  sameAs      String?  // JSON array of URLs (Wikipedia, LinkedIn, etc.)
+  properties  String?  // JSON object of additional properties
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([entityType])
+}
+
+/// FAQ clusters for AEO (answer engine optimization)
+model FaqCluster {
+  id          String   @id @default(cuid())
+  question    String
+  answer      String
+  category    String   @default("general") // general | cost | comparison | process | compliance | local
+  entity      String?  // related entity name
+  pageUrl     String?  // which page this FAQ belongs to
+  status      String   @default("published") // draft | published
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category])
+  @@index([pageUrl])
+  @@index([status])
+}
+
+/// SXO — conversion flows and CTA management
+model ConversionFlow {
+  id          String   @id @default(cuid())
+  name        String
+  pageUrl     String   // which page this CTA appears on
+  ctaLabel    String
+  ctaUrl      String
+  ctaType     String   @default("primary") // primary | secondary | whatsapp | call | email
+  placement   String   @default("bottom") // hero | inline | bottom | sidebar | floating
+  intent      String   @default("conversion") // awareness | consideration | conversion
+  status      String   @default("active")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([pageUrl])
+  @@index([status])
+}
+
+/// Global optimization settings (SXO tracking, GEO signals)
+model OptimizationSetting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String // JSON
+  updatedAt DateTime @updatedAt
+}

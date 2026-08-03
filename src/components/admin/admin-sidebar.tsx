@@ -18,6 +18,7 @@ import {
   Globe,
   Image as ImageIcon,
   ClipboardList,
+  TrendingUp,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -33,6 +34,7 @@ const NAV = [
   { href: "/admin/hero", label: "Hero Sections", icon: Layout },
   { href: "/admin/media", label: "Media Library", icon: ImageIcon },
   { href: "/admin/forms", label: "Forms", icon: ClipboardList },
+  { href: "/admin/optimization", label: "Optimization", icon: TrendingUp },
   { href: "/admin/site-settings", label: "Site Settings", icon: Globe },
   { href: "/admin/settings", label: "Account", icon: Settings },
 ];
