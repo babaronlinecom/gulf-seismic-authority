@@ -61,4 +61,4 @@ server.log
 
 # Worklog (internal agent coordination)
 worklog.md
-AGENT.md
+AGENT.md.vercel/
