@@ -15,6 +15,16 @@ import { DynamicIcon } from "@/components/gulf/dynamic-icon";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { projectCollectionSchema } from "@/lib/aeo-geo";
 
+// Map project slugs to their generated images
+const projectImageMap: Record<string, string> = {
+  "abu-dhabi-highway-thermoplastic": "/images/projects/highway-thermoplastic.jpg",
+  "dubai-mall-parking-marking": "/images/projects/mall-parking.jpg",
+  "riyadh-warehouse-epoxy-marking": "/images/projects/warehouse-epoxy.jpg",
+  "jubail-petrochemical-hazard-marking": "/images/projects/petrochemical-marking.jpg",
+  "dammam-airport-taxiway-marking": "/images/projects/airport-taxiway.jpg",
+  "sharjah-factory-epoxy-floor": "/images/projects/factory-epoxy-floor.jpg",
+};
+
 // ISR: revalidate every 5 minutes (fetches live CMS data at runtime,
 // but uses seed data during build to avoid CMS fetch during SSG)
 export const revalidate = 300;
@@ -75,11 +85,18 @@ export default async function ProjectsPage() {
             {displayProjects.map((project) => {
               const service = services.find((s) => s.slug === project.service);
               const city = cities.find((c) => c.slug === project.city);
+              const projectImg = projectImageMap[project.slug] || `/images/services/${project.service || "road-marking"}.jpg`;
               return (
                 <Link key={project.slug} href={`/projects/${project.slug}`} className="group block h-full">
                   <Card className="flex h-full flex-col overflow-hidden transition-all hover:border-amber-brand hover:shadow-lg">
-                    <div className="relative h-32 overflow-hidden bg-primary">
-                      <div className="absolute inset-0 road-stripe-h opacity-30" />
+                    <div className="relative h-36 overflow-hidden bg-primary">
+                      <img
+                        src={projectImg}
+                        alt={`${project.title} — ${service?.name || "marking"} in ${city?.name || ""}`}
+                        className="h-full w-full object-cover opacity-70 transition-transform duration-300 group-hover:scale-105"
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-primary/90 to-transparent" />
                       <div className="absolute inset-0 flex items-center justify-between p-4">
                         <div className="flex items-center gap-2">
                           {service && (
