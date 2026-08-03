@@ -291,3 +291,28 @@ Stage Summary:
 - Admin credentials: admin@gulfseismic.com / gulf-seismic-2026 (CHANGE PASSWORD after first login via Settings).
 - Agent Browser verified: login flow works, dashboard shows stats + recent leads, leads page has search/filter/export, projects page has CRUD dialog.
 - Deployed via prebuilt tgz archive (Ready in 47s).
+
+---
+Task ID: DB (PostgreSQL Neon Database Setup)
+Agent: Orchestrator (Z.ai Code)
+Task: Connect the admin backend to a production PostgreSQL database (Neon) and verify login works on production.
+
+Work Log:
+- Updated Prisma schema: provider changed from sqlite to postgresql.
+- Set DATABASE_URL in .env to Neon connection string (removed channel_binding=require as Prisma CLI doesn't support it).
+- Pushed schema to Neon: all 9 tables created (Rfq, Lead, Subscriber, CaseStudy, Service, AuditLog, AdminUser, ProjectRecord, CaseStudyRecord).
+- Seeded admin user into Neon: admin@gulfseismic.com / gulf-seismic-2026 (admin role, bcrypt hash).
+- Set DATABASE_URL + NEXTAUTH_SECRET + NEXTAUTH_URL env vars on Vercel project.
+- First production deploy: login failed — Prisma Client could not locate Query Engine for runtime "rhel-openssl-3.0.x" (generated for debian-openssl-3.0.x locally, but Vercel runs RHEL).
+- Fix: added binaryTargets = ["native", "rhel-openssl-3.0.x", "debian-openssl-3.0.x"] to Prisma generator config.
+- Regenerated Prisma Client, rebuilt prebuilt output, deployed via tgz archive.
+- Verified production database connection via /api/debug-db: admin user found, password hash valid.
+- Verified production admin login: admin@gulfseismic.com → /admin dashboard renders with sidebar, stats, charts.
+- Removed debug endpoints (debug-env, debug-db) for security.
+
+Stage Summary:
+- Database: Neon PostgreSQL (ep-polished-wildflower-ax0sgzc4-pooler.c-4.us-east-2.aws.neon.tech/neondb)
+- Production admin login: WORKING at https://gulf-seismic-authority.vercel.app/admin/login
+- Admin credentials: admin@gulfseismic.com / gulf-seismic-2026
+- All admin features (dashboard, leads, projects, case studies, settings) now use the live Neon database.
+- Prisma binaryTargets fix ensures the client works on both local dev (debian) and Vercel (rhel).
