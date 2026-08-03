@@ -11,11 +11,17 @@ import { CaseStudiesSection } from "@/components/gulf/case-studies-section";
 import { LeadCtaSection } from "@/components/gulf/lead-cta-section";
 import { Button } from "@/components/ui/button";
 import { company, services } from "@/lib/gulf-data";
+import { getSiteSettings, getHero } from "@/lib/cms";
 
-export default function Home() {
+export default async function Home() {
+  const [settings, hero] = await Promise.all([
+    getSiteSettings(),
+    getHero("home"),
+  ]);
+
   return (
     <>
-      <Hero />
+      <Hero hero={hero} settings={settings} />
 
       {/* Trust strip */}
       <section className="border-b border-border bg-background">

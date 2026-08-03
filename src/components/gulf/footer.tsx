@@ -2,9 +2,15 @@
 
 import Link from "next/link";
 import { Phone, Mail, MapPin, Linkedin, Instagram, ArrowRight } from "lucide-react";
-import { company, services, countries, cities } from "@/lib/gulf-data";
+import type { SiteSettings, MenuLink } from "@/lib/cms";
+import { services, countries, cities } from "@/lib/gulf-data";
 
-export function Footer() {
+interface FooterProps {
+  settings: SiteSettings;
+  menuItems: MenuLink[];
+}
+
+export function Footer({ settings, menuItems }: FooterProps) {
   return (
     <footer className="mt-auto border-t border-border bg-primary text-primary-foreground">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -14,20 +20,20 @@ export function Footer() {
             <div className="flex items-center gap-2.5">
               <div className="relative flex h-9 w-9 items-center justify-center overflow-hidden rounded-md bg-amber-brand">
                 <div className="absolute inset-0 road-stripe-h opacity-40" />
-                <span className="relative font-bold text-sm text-amber-foreground">GS</span>
+                <span className="relative font-bold text-sm text-amber-foreground">{settings.logoText}</span>
               </div>
               <div>
-                <div className="font-bold">Gulf Seismic</div>
+                <div className="font-bold">{settings.siteName}</div>
                 <div className="text-[10px] uppercase tracking-widest text-primary-foreground/60">
                   Road & Industrial Marking
                 </div>
               </div>
             </div>
             <p className="mt-4 max-w-sm text-sm text-primary-foreground/70">
-              {company.description}
+              {settings.footerAbout}
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
-              {company.certifications.map((cert) => (
+              {settings.certifications.map((cert) => (
                 <span
                   key={cert}
                   className="rounded-full border border-primary-foreground/20 px-3 py-1 text-[11px] text-primary-foreground/80"
@@ -38,7 +44,7 @@ export function Footer() {
             </div>
             <div className="mt-4 flex gap-3">
               <a
-                href={company.social.linkedin}
+                href={settings.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex h-9 w-9 items-center justify-center rounded-md bg-primary-foreground/10 hover:bg-primary-foreground/20 transition-colors"
@@ -47,7 +53,7 @@ export function Footer() {
                 <Linkedin className="h-4 w-4" />
               </a>
               <a
-                href={company.social.instagram}
+                href={settings.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex h-9 w-9 items-center justify-center rounded-md bg-primary-foreground/10 hover:bg-primary-foreground/20 transition-colors"
@@ -64,7 +70,7 @@ export function Footer() {
               Services
             </h3>
             <ul className="space-y-2">
-              {services.map((s) => (
+              {services.slice(0, 8).map((s) => (
                 <li key={s.slug}>
                   <Link
                     href={`/services/${s.slug}`}
@@ -77,54 +83,22 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Regions */}
+          {/* CMS Menu items */}
           <div>
             <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-primary-foreground/90">
-              Regions
+              Company
             </h3>
             <ul className="space-y-2">
-              {countries.map((c) => (
-                <li key={c.slug}>
+              {menuItems.map((item) => (
+                <li key={item.id}>
                   <Link
-                    href={`/${c.slug}`}
-                    className="text-sm font-medium text-primary-foreground/80 hover:text-amber-brand"
+                    href={item.url}
+                    className="text-sm text-primary-foreground/70 hover:text-amber-brand transition-colors"
                   >
-                    {c.flag} {c.name}
+                    {item.label}
                   </Link>
                 </li>
               ))}
-              <li className="pt-2">
-                <Link
-                  href="/projects"
-                  className="text-sm text-primary-foreground/70 hover:text-amber-brand"
-                >
-                  Projects
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/industries"
-                  className="text-sm text-primary-foreground/70 hover:text-amber-brand"
-                >
-                  Industries
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/about"
-                  className="text-sm text-primary-foreground/70 hover:text-amber-brand"
-                >
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/contact"
-                  className="text-sm text-primary-foreground/70 hover:text-amber-brand"
-                >
-                  Contact
-                </Link>
-              </li>
             </ul>
           </div>
 
@@ -136,25 +110,25 @@ export function Footer() {
             <ul className="space-y-3 text-sm">
               <li>
                 <a
-                  href={`tel:${company.phone.replace(/\s/g, "")}`}
+                  href={`tel:${settings.phone.replace(/\s/g, "")}`}
                   className="flex items-start gap-2 text-primary-foreground/70 hover:text-amber-brand"
                 >
                   <Phone className="mt-0.5 h-4 w-4 shrink-0" />
-                  <span>{company.phone}</span>
+                  <span>{settings.phone}</span>
                 </a>
               </li>
               <li>
                 <a
-                  href={`mailto:${company.email}`}
+                  href={`mailto:${settings.email}`}
                   className="flex items-start gap-2 text-primary-foreground/70 hover:text-amber-brand"
                 >
                   <Mail className="mt-0.5 h-4 w-4 shrink-0" />
-                  <span>{company.email}</span>
+                  <span>{settings.email}</span>
                 </a>
               </li>
               <li className="flex items-start gap-2 text-primary-foreground/70">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0" />
-                <span>{company.headquarters.address}</span>
+                <span>{settings.address}</span>
               </li>
             </ul>
             <Link
@@ -188,7 +162,7 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-primary-foreground/10 pt-6 sm:flex-row">
           <p className="text-xs text-primary-foreground/50">
-            © {new Date().getFullYear()} {company.legalName}. All rights reserved.
+            © {new Date().getFullYear()} {settings.siteName}. All rights reserved.
           </p>
           <div className="flex gap-4 text-xs text-primary-foreground/50">
             <Link href="/privacy" className="hover:text-amber-brand">Privacy</Link>

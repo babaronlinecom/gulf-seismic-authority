@@ -2,9 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { MessageCircle, X, Phone } from "lucide-react";
-import { company } from "@/lib/gulf-data";
 
-export function WhatsAppFab() {
+export function WhatsAppFab({ whatsapp, phone }: { whatsapp: string; phone: string }) {
   const [open, setOpen] = useState(false);
   const [visible, setVisible] = useState(false);
 
