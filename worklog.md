@@ -459,3 +459,30 @@ Stage Summary:
 - Social sharing: OG image with full meta tags (verified in HTML source)
 - All images return HTTP 200 on production
 - Website is no longer "empty with images" — every section has professional, relevant visuals
+
+---
+Task ID: MEDIA (Full-Featured Media Library with SEO/Social Editing)
+Agent: Orchestrator (Z.ai Code)
+Task: Import all generated images into Media Library (was 0) and build full-featured table with SEO, social, and display editing.
+
+Work Log:
+- Enhanced MediaItem schema with 12 new fields: title, seoTitle, seoAlt, seoCaption, ogTitle, ogDescription, socialCaption, socialHashtags, lazyLoad, gradientOverlay, resizeNote, updatedAt.
+- Built import script (scripts/import-media.ts) that reads all /public/images/ files, extracts dimensions via sharp, and imports into DB with pre-populated metadata for every image.
+- Imported 22 images into Media Library database (was 0) — each with full title, alt text, SEO fields, OG metadata, social captions, hashtags, gradient overlay, resize notes.
+- Rebuilt Media Library UI with TWO view modes:
+  1. TABLE VIEW: columns for Thumbnail, Title, Alt Text, Dimensions, Size, Folder, SEO status (✓/✗), Social status (✓/✗), Display options (LL/GR badges), Actions (copy URL, edit, delete)
+  2. GRID VIEW: thumbnail grid with hover actions and SEO/SOC badges
+- Built 5-tab Image Detail Editor:
+  1. General: title, descriptive alt text, folder
+  2. SEO: seoTitle, seoAlt, seoCaption + SEO checklist (title set, alt set, caption set, width ≥1200px)
+  3. Social/OG: ogTitle, ogDescription, socialCaption, socialHashtags
+  4. Display: lazy loading toggle (enabled/disabled), gradient overlay selector (none/light/dark/primary), resize notes
+  5. Preview: live Facebook/LinkedIn/WhatsApp share preview, Twitter card preview, Google Image search preview
+- Updated media API PUT route to handle all 12 new fields.
+- Agent Browser verified: Media Library shows 22 images in table view with all columns populated (titles, alt text, SEO ✓, Social ✓, dimensions, folder badges).
+
+Stage Summary:
+- Media Library: 0 → 22 images, all with full SEO + social metadata
+- Table view: thumbnails, titles, alt text, dimensions, size, folder, SEO status, social status, display options
+- Editor: 5 tabs (General, SEO, Social/OG, Display, Preview) with live social media previews
+- Production deployed: https://gulf-seismic-authority.vercel.app/admin/media
