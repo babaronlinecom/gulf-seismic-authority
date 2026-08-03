@@ -16,14 +16,19 @@ export default async function AdminOptimizationPage() {
         </p>
       </div>
 
-      <Tabs defaultValue="hub">
+      <Tabs defaultValue="recommendations">
         <TabsList className="mb-4">
+          <TabsTrigger value="recommendations">💡 Recommendations</TabsTrigger>
           <TabsTrigger value="hub">📊 Hub Dashboard</TabsTrigger>
           <TabsTrigger value="pages">📄 Page Optimizer</TabsTrigger>
           <TabsTrigger value="entities">🧠 AI Entities (AIO/GEO)</TabsTrigger>
           <TabsTrigger value="faqs">💬 FAQ Clusters (AEO)</TabsTrigger>
           <TabsTrigger value="ctas">🎯 Conversion CTAs (SXO)</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="recommendations">
+          <RecommendationsPanel />
+        </TabsContent>
 
         <TabsContent value="hub">
           <OptimizationHub />
@@ -53,3 +58,4 @@ export default async function AdminOptimizationPage() {
 import { EntitiesManager } from "@/components/admin/entities-manager";
 import { FaqsManager } from "@/components/admin/faqs-manager";
 import { CtasManager } from "@/components/admin/ctas-manager";
+import { RecommendationsPanel } from "@/components/admin/recommendations-panel";
