@@ -1,9 +1,0 @@
-# Files excluded from Vercel deployment builds
-scripts
-tests
-docs
-*.md
-examples
-download
-screenshot-*.png
-.env.example
