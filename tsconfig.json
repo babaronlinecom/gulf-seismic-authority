@@ -40,6 +40,10 @@
     "node_modules",
     "scripts",
     "mini-services",
-    "tests"
+    "tests",
+    "skills",
+    "examples",
+    "download",
+    "docs"
   ]
 }
