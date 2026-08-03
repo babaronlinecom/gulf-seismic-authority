@@ -425,3 +425,34 @@ model OptimizationSetting {
   value String // JSON
   updatedAt DateTime @updatedAt
 }
+
+/// Competitor tracking (competitor analysis)
+model Competitor {
+  id        String   @id @default(cuid())
+  name      String
+  url       String
+  country   String?
+  services  String?  // JSON array of services they offer
+  strengths String?
+  weaknesses String?
+  ranking   Int?
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([country])
+}
+
+/// Optimization score history (track progress over time)
+model OptimizationSnapshot {
+  id        String   @id @default(cuid())
+  seo       Int
+  aio       Int
+  geo       Int
+  aeo       Int
+  sxo       Int
+  overall   Int
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
