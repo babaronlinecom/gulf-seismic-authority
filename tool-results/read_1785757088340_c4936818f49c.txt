@@ -1,0 +1,1572 @@
+     1→/**
+     2→ * Gulf Seismic Authority Graph — Master Data Layer
+     3→ * --------------------------------------------------
+     4→ * Single source of truth for the Country → City → Service → Industry →
+     5→ * Project → Case Study → Blog authority graph.
+     6→ *
+     7→ * In production these entities are served from the headless WordPress CMS
+     8→ * (https://cms.gulfseismic.com/graphql) via the CPTs: Countries, Cities,
+     9→ * Services, Industries, Projects, CaseStudies, Blogs, FAQs, Resources.
+    10→ * This module provides resilient seed data so the frontend renders even
+    11→ * when the CMS is unreachable, and acts as the TypeScript contract for
+    12→ * the GraphQL response shapes.
+    13→ */
+    14→
+    15→export type CountrySlug = "uae" | "saudi-arabia";
+    16→
+    17→export interface Country {
+    18→  slug: CountrySlug;
+    19→  name: string;
+    20→  shortName: string;
+    21→  code: string; // ISO 3166-1 alpha-2
+    22→  flag: string; // emoji
+    23→  heroHeading: string;
+    24→  heroDescription: string;
+    25→  seoTitle: string;
+    26→  seoDescription: string;
+    27→  dialCode: string;
+    28→  whatsapp: string;
+    29→  phone: string;
+    30→}
+    31→
+    32→export interface City {
+    33→  slug: string;
+    34→  country: CountrySlug;
+    35→  name: string;
+    36→  region: string;
+    37→  latitude: number;
+    38→  longitude: number;
+    39→  heroHeading: string;
+    40→  heroDescription: string;
+    41→  seoTitle: string;
+    42→  seoDescription: string;
+    43→  population: string;
+    44→  highlights: string[];
+    45→}
+    46→
+    47→export interface Service {
+    48→  slug: string;
+    49→  name: string;
+    50→  tagline: string;
+    51→  shortDescription: string;
+    52→  longDescription: string;
+    53→  icon: string; // lucide icon name
+    54→  benefits: string[];
+    55→  materials: string[];
+    56→  equipment: string[];
+    57→  industriesServed: string[]; // industry slugs
+    58→  faqs: { question: string; answer: string }[];
+    59→  heroHeading: string;
+    60→  heroDescription: string;
+    61→  seoTitle: string;
+    62→  seoDescription: string;
+    63→  process: { step: number; title: string; description: string }[];
+    64→  specs: { label: string; value: string }[];
+    65→}
+    66→
+    67→export interface Industry {
+    68→  slug: string;
+    69→  name: string;
+    70→  description: string;
+    71→  icon: string;
+    72→  challenges: string[];
+    73→  solutions: string[];
+    74→  services: string[]; // service slugs
+    75→}
+    76→
+    77→export interface Project {
+    78→  slug: string;
+    79→  title: string;
+    80→  country: CountrySlug;
+    81→  city: string; // city slug
+    82→  service: string; // service slug
+    83→  industry: string; // industry slug
+    84→  client: string;
+    85→  year: number;
+    86→  duration: string;
+    87→  challenge: string;
+    88→  solution: string;
+    89→  execution: string;
+    90→  materials: string[];
+    91→  equipment: string[];
+    92→  results: { label: string; value: string }[];
+    93→  gallery: { alt: string; caption: string }[];
+    94→  location: string;
+    95→  area: string;
+    96→}
+    97→
+    98→export interface CaseStudy {
+    99→  slug: string;
+   100→  title: string;
+   101→  projectSlug: string;
+   102→  summary: string;
+   103→  outcomes: string[];
+   104→  testimonial: { quote: string; author: string; role: string } | null;
+   105→}
+   106→
+   107→export interface BlogPost {
+   108→  slug: string;
+   109→  title: string;
+   110→  excerpt: string;
+   111→  category: string;
+   112→  readTime: string;
+   113→  date: string;
+   114→  author: string;
+   115→}
+   116→
+   117→// ---------------------------------------------------------------------------
+   118→// COUNTRIES
+   119→// ---------------------------------------------------------------------------
+   120→
+   121→export const countries: Country[] = [
+   122→  {
+   123→    slug: "uae",
+   124→    name: "United Arab Emirates",
+   125→    shortName: "UAE",
+   126→    code: "AE",
+   127→    flag: "🇦🇪",
+   128→    heroHeading: "Road Marking Specialists Across the United Arab Emirates",
+   129→    heroDescription:
+   130→      "Gulf Seismic delivers thermoplastic road marking, parking lot marking, warehouse marking and industrial safety signage across all seven Emirates — engineered to withstand extreme desert heat and heavy traffic loads.",
+   131→    seoTitle: "Road Marking UAE | Thermoplastic & Industrial Marking Contractors",
+   132→    seoDescription:
+   133→      "Leading road marking company in UAE. Thermoplastic road marking, parking lot marking, warehouse marking, airport marking and epoxy flooring across Abu Dhabi, Dubai, Sharjah and all Emirates.",
+   134→    dialCode: "+971",
+   135→    whatsapp: "97150000000",
+   136→    phone: "+971 4 000 0000",
+   137→  },
+   138→  {
+   139→    slug: "saudi-arabia",
+   140→    name: "Kingdom of Saudi Arabia",
+   141→    shortName: "Saudi Arabia",
+   142→    code: "SA",
+   143→    flag: "🇸🇦",
+   144→    heroHeading: "Saudi Arabia's Trusted Road & Industrial Marking Authority",
+   145→    heroDescription:
+   146→      "From Vision 2030 megaprojects to municipal road networks, Gulf Seismic provides premium thermoplastic marking, warehouse line marking and safety signage across Riyadh, Jeddah, Dammam and the Kingdom.",
+   147→    seoTitle: "Road Marking Saudi Arabia | Thermoplastic Marking Riyadh Jeddah",
+   148→    seoDescription:
+   149→      "Saudi Arabia road marking contractor. Thermoplastic road marking, warehouse marking, airport marking and epoxy flooring in Riyadh, Jeddah, Dammam, Khobar, Jubail, Yanbu, Makkah and Madinah.",
+   150→    dialCode: "+966",
+   151→    whatsapp: "966500000000",
+   152→    phone: "+966 11 000 0000",
+   153→  },
+   154→];
+   155→
+   156→// ---------------------------------------------------------------------------
+   157→// CITIES — 16 total (8 UAE + 8 Saudi)
+   158→// ---------------------------------------------------------------------------
+   159→
+   160→export const cities: City[] = [
+   161→  // ---- UAE ----
+   162→  {
+   163→    slug: "abu-dhabi",
+   164→    country: "uae",
+   165→    name: "Abu Dhabi",
+   166→    region: "Emirate of Abu Dhabi",
+   167→    latitude: 24.4539,
+   168→    longitude: 54.3773,
+   169→    heroHeading: "Road Marking Contractors in Abu Dhabi",
+   170→    heroDescription:
+   171→      "Capital-grade road marking, parking line marking and industrial floor marking services for Abu Dhabi's highways, megaprojects and commercial developments.",
+   172→    seoTitle: "Road Marking Abu Dhabi | Thermoplastic & Parking Marking",
+   173→    seoDescription:
+   174→      "Abu Dhabi road marking company. Thermoplastic road marking, parking lot marking, warehouse marking and epoxy flooring for highways, malls and industrial facilities.",
+   175→    population: "1.5M+",
+   176→    highlights: ["Capital megaprojects", "Highway networks", "Mega-mall parking"],
+   177→  },
+   178→  {
+   179→    slug: "dubai",
+   180→    country: "uae",
+   181→    name: "Dubai",
+   182→    region: "Emirate of Dubai",
+   183→    latitude: 25.2048,
+   184→    longitude: 55.2708,
+   185→    heroHeading: "Road Marking Contractors in Dubai",
+   186→    heroDescription:
+   187→      "Precision thermoplastic marking and parking lot line marking for Dubai's world-class road network, malls, airports and logistics hubs.",
+   188→    seoTitle: "Road Marking Dubai | Parking Lot & Thermoplastic Marking",
+   189→    seoDescription:
+   190→      "Dubai road marking specialists. Thermoplastic road marking, parking lot marking, warehouse marking, airport marking and epoxy flooring across Dubai.",
+   191→    population: "3.6M+",
+   192→    highlights: ["Expo legacy infrastructure", "Logistics hubs", "Mall parking"],
+   193→  },
+   194→  {
+   195→    slug: "sharjah",
+   196→    country: "uae",
+   197→    name: "Sharjah",
+   198→    region: "Emirate of Sharjah",
+   199→    latitude: 25.3463,
+   200→    longitude: 55.4209,
+   201→    heroHeading: "Road Marking Contractors in Sharjah",
+   202→    heroDescription:
+   203→      "Industrial and commercial marking services for Sharjah's manufacturing zones, residential communities and arterial roads.",
+   204→    seoTitle: "Road Marking Sharjah | Industrial & Parking Marking",
+   205→    seoDescription:
+   206→      "Sharjah road marking contractor. Thermoplastic road marking, warehouse marking, parking lot marking and safety signage for industrial areas.",
+   207→    population: "1.8M+",
+   208→    highlights: ["Industrial zones", "Residential communities", "Cultural capital"],
+   209→  },
+   210→  {
+   211→    slug: "ajman",
+   212→    country: "uae",
+   213→    name: "Ajman",
+   214→    region: "Emirate of Ajman",
+   215→    latitude: 25.4052,
+   216→    longitude: 55.5136,
+   217→    heroHeading: "Road Marking Contractors in Ajman",
+   218→    heroDescription:
+   219→      "Cost-effective road marking, parking line marking and safety signage for Ajman's growing commercial and residential developments.",
+   220→    seoTitle: "Road Marking Ajman | Parking & Safety Marking",
+   221→    seoDescription:
+   222→      "Ajman road marking services. Thermoplastic road marking, parking lot marking and industrial safety signage for commercial properties.",
+   223→    population: "500K+",
+   224→    highlights: ["Commercial hubs", "Residential towers", "Port area"],
+   225→  },
+   226→  {
+   227→    slug: "ras-al-khaimah",
+   228→    country: "uae",
+   229→    name: "Ras Al Khaimah",
+   230→    region: "Emirate of Ras Al Khaimah",
+   231→    latitude: 25.7853,
+   232→    longitude: 55.9432,
+   233→    heroHeading: "Road Marking Contractors in Ras Al Khaimah",
+   234→    heroDescription:
+   235→      "Durable thermoplastic marking and industrial floor marking for RAK's quarries, cement plants and mountain highway networks.",
+   236→    seoTitle: "Road Marking Ras Al Khaimah | Industrial & Highway Marking",
+   237→    seoDescription:
+   238→      "Ras Al Khaimah road marking. Thermoplastic highway marking, warehouse marking and safety signage for industrial and tourism sectors.",
+   239→    population: "400K+",
+   240→    highlights: ["Industrial quarries", "Mountain highways", "Tourism zones"],
+   241→  },
+   242→  {
+   243→    slug: "fujairah",
+   244→    country: "uae",
+   245→    name: "Fujairah",
+   246→    region: "Emirate of Fujairah",
+   247→    latitude: 25.1166,
+   248→    longitude: 56.3316,
+   249→    heroHeading: "Road Marking Contractors in Fujairah",
+   250→    heroDescription:
+   251→      "Port and oil-terminal grade marking services for Fujairah's strategic east-coast logistics and energy infrastructure.",
+   252→    seoTitle: "Road Marking Fujairah | Port & Industrial Marking",
+   253→    seoDescription:
+   254→      "Fujairah road marking contractor. Thermoplastic marking, warehouse marking and hazardous-zone safety signage for port and energy facilities.",
+   255→    population: "250K+",
+   256→    highlights: ["Port operations", "Oil terminals", "East coast highways"],
+   257→  },
+   258→  {
+   259→    slug: "al-ain",
+   260→    country: "uae",
+   261→    name: "Al Ain",
+   262→    region: "Emirate of Abu Dhabi",
+   263→    latitude: 24.2075,
+   264→    longitude: 55.7447,
+   265→    heroHeading: "Road Marking Contractors in Al Ain",
+   266→    heroDescription:
+   267→      "Garden-city road marking, parking and institutional marking for Al Ain's universities, hospitals and heritage routes.",
+   268→    seoTitle: "Road Marking Al Ain | Parking & Institutional Marking",
+   269→    seoDescription:
+   270→      "Al Ain road marking services. Thermoplastic road marking, parking lot marking and safety signage for institutional and residential areas.",
+   271→    population: "760K+",
+   272→    highlights: ["Universities", "Heritage routes", "Garden city"],
+   273→  },
+   274→  {
+   275→    slug: "umm-al-quwain",
+   276→    country: "uae",
+   277→    name: "Umm Al Quwain",
+   278→    region: "Emirate of Umm Al Quwain",
+   279→    latitude: 25.5593,
+   280→    longitude: 55.5558,
+   281→    heroHeading: "Road Marking Contractors in Umm Al Quwain",
+   282→    heroDescription:
+   283→      "Reliable road and parking marking for Umm Al Quwain's coastal developments, tourism projects and residential communities.",
+   284→    seoTitle: "Road Marking Umm Al Quwain | Parking & Coastal Marking",
+   285→    seoDescription:
+   286→      "Umm Al Quwain road marking. Thermoplastic road marking, parking lot marking and safety signage for coastal and tourism developments.",
+   287→    population: "80K+",
+   288→    highlights: ["Coastal tourism", "Residential growth", "Marina areas"],
+   289→  },
+   290→  // ---- Saudi Arabia ----
+   291→  {
+   292→    slug: "riyadh",
+   293→    country: "saudi-arabia",
+   294→    name: "Riyadh",
+   295→    region: "Riyadh Province",
+   296→    latitude: 24.7136,
+   297→    longitude: 46.6753,
+   298→    heroHeading: "Road Marking Contractors in Riyadh",
+   299→    heroDescription:
+   300→      "Capital-scale thermoplastic marking, parking and industrial floor marking supporting Riyadh's Vision 2030 megaprojects and urban expansion.",
+   301→    seoTitle: "Road Marking Riyadh | Thermoplastic & Warehouse Marking",
+   302→    seoDescription:
+   303→      "Riyadh road marking company. Thermoplastic road marking, parking lot marking, warehouse marking and epoxy flooring for Vision 2030 projects.",
+   304→    population: "7.6M+",
+   305→    highlights: ["Vision 2030 megaprojects", "Capital highway network", "Logistics city"],
+   306→  },
+   307→  {
+   308→    slug: "jeddah",
+   309→    country: "saudi-arabia",
+   310→    name: "Jeddah",
+   311→    region: "Makkah Province",
+   312→    latitude: 21.4858,
+   313→    longitude: 39.1925,
+   314→    heroHeading: "Road Marking Contractors in Jeddah",
+   315→    heroDescription:
+   316→      "Coastal-grade marking engineered for Jeddah's humidity — serving the port, corniche and pilgrim transit routes.",
+   317→    seoTitle: "Road Marking Jeddah | Parking & Port Industrial Marking",
+   318→    seoDescription:
+   319→      "Jeddah road marking contractor. Thermoplastic road marking, parking lot marking, warehouse marking and safety signage for port and pilgrim routes.",
+   320→    population: "4M+",
+   321→    highlights: ["Red Sea port", "Pilgrim transit", "Corniche highways"],
+   322→  },
+   323→  {
+   324→    slug: "dammam",
+   325→    country: "saudi-arabia",
+   326→    name: "Dammam",
+   327→    region: "Eastern Province",
+   328→    latitude: 26.4207,
+   329→    longitude: 50.0888,
+   330→    heroHeading: "Road Marking Contractors in Dammam",
+   331→    heroDescription:
+   332→      "Oil-and-gas-grade industrial marking for Dammam's Eastern Province energy corridor, ports and logistics hubs.",
+   333→    seoTitle: "Road Marking Dammam | Industrial & Warehouse Marking",
+   334→    seoDescription:
+   335→      "Dammam road marking. Thermoplastic road marking, warehouse marking, hazardous-zone signage and epoxy flooring for the Eastern Province energy sector.",
+   336→    population: "1.5M+",
+   337→    highlights: ["Energy corridor", "King Abdul Aziz Port", "Industrial cities"],
+   338→  },
+   339→  {
+   340→    slug: "khobar",
+   341→    country: "saudi-arabia",
+   342→    name: "Al Khobar",
+   343→    region: "Eastern Province",
+   344→    latitude: 26.2794,
+   345→    longitude: 50.2083,
+   346→    heroHeading: "Road Marking Contractors in Al Khobar",
+   347→    heroDescription:
+   348→      "Premium marking for Khobar's commercial boulevards, corniche and upscale parking facilities.",
+   349→    seoTitle: "Road Marking Al Khobar | Parking & Commercial Marking",
+   350→    seoDescription:
+   351→      "Al Khobar road marking contractor. Thermoplastic road marking, parking lot marking and commercial safety signage for the corniche and business districts.",
+   352→    population: "600K+",
+   353→    highlights: ["Corniche boulevards", "Commercial districts", "Corniche parking"],
+   354→  },
+   355→  {
+   356→    slug: "jubail",
+   357→    country: "saudi-arabia",
+   358→    name: "Jubail",
+   359→    region: "Eastern Province",
+   360→    latitude: 27.0046,
+   361→    longitude: 49.6614,
+   362→    heroHeading: "Road Marking Contractors in Jubail",
+   363→    heroDescription:
+   364→      "Heavy-industrial marking for the world's largest industrial city — Jubail's petrochemical plants, ports and industrial roads.",
+   365→    seoTitle: "Road Marking Jubail | Industrial & Petrochemical Marking",
+   366→    seoDescription:
+   367→      "Jubail road marking. Industrial thermoplastic marking, warehouse marking, hazardous-zone signage and epoxy flooring for petrochemical facilities.",
+   368→    population: "700K+",
+   369→    highlights: ["Largest industrial city", "Petrochemical plants", "Industrial ports"],
+   370→  },
+   371→  {
+   372→    slug: "yanbu",
+   373→    country: "saudi-arabia",
+   374→    name: "Yanbu",
+   375→    region: "Madinah Province",
+   376→    latitude: 24.0895,
+   377→    longitude: 38.0618,
+   378→    heroHeading: "Road Marking Contractors in Yanbu",
+   379→    heroDescription:
+   380→      "Red Sea industrial city marking for Yanbu's refineries, port and industrial road networks.",
+   381→    seoTitle: "Road Marking Yanbu | Industrial & Port Marking",
+   382→    seoDescription:
+   383→      "Yanbu road marking contractor. Industrial thermoplastic marking, warehouse marking and safety signage for refineries and port facilities.",
+   384→    population: "400K+",
+   385→    highlights: ["Refineries", "Red Sea port", "Industrial city"],
+   386→  },
+   387→  {
+   388→    slug: "makkah",
+   389→    country: "saudi-arabia",
+   390→    name: "Makkah",
+   391→    region: "Makkah Province",
+   392→    latitude: 21.3891,
+   393→    longitude: 39.8579,
+   394→    heroHeading: "Road Marking Contractors in Makkah",
+   395→    heroDescription:
+   396→      "High-capacity marking for Makkah's pilgrim-season road network, parking structures and holy-site transit routes.",
+   397→    seoTitle: "Road Marking Makkah | Pilgrim Route & Parking Marking",
+   398→    seoDescription:
+   399→      "Makkah road marking. Thermoplastic road marking, parking structure marking and safety signage for pilgrim transit and holy-site routes.",
+   400→    population: "2M+",
+   401→    highlights: ["Pilgrim transit", "Holy-site routes", "Seasonal capacity"],
+   402→  },
+   403→  {
+   404→    slug: "madinah",
+   405→    country: "saudi-arabia",
+   406→    name: "Madinah",
+   407→    region: "Madinah Province",
+   408→    latitude: 24.5247,
+   409→    longitude: 39.5692,
+   410→    heroHeading: "Road Marking Contractors in Madinah",
+   411→    heroDescription:
+   412→      "Precision marking for Madinah's pilgrim corridors, central area roads and mosque-adjacent parking facilities.",
+   413→    seoTitle: "Road Marking Madinah | Pilgrim Corridor & Parking Marking",
+   414→    seoDescription:
+   415→      "Madinah road marking contractor. Thermoplastic road marking, parking marking and safety signage for pilgrim corridors and central areas.",
+   416→    population: "1.5M+",
+   417→    highlights: ["Pilgrim corridors", "Central mosque area", "Heritage routes"],
+   418→  },
+   419→];
+   420→
+   421→// ---------------------------------------------------------------------------
+   422→// SERVICES — 8 core commercial services
+   423→// ---------------------------------------------------------------------------
+   424→
+   425→export const services: Service[] = [
+   426→  {
+   427→    slug: "road-marking",
+   428→    name: "Road Marking",
+   429→    tagline: "Highway-grade line marking built for Gulf traffic and heat.",
+   430→    shortDescription:
+   431→      "Durable hot-applied thermoplastic and cold plastic road line marking for highways, urban roads and access roads — compliant with Gulf municipal specifications.",
+   432→    longDescription:
+   433→      "Our road marking division applies engineered thermoplastic and methyl methacrylate (MMA) line systems designed to survive 50°C+ asphalt temperatures, intense UV exposure and heavy HGV traffic. We deploy self-propelled line-marking machines with glass-bead dispensers for retroreflectivity that keeps roads safe after dark. Every project follows local RTA, DoT and Saudi MOMRA specification, including line width, colour and reflectivity standards.",
+   434→    icon: "Road",
+   435→    benefits: [
+   436→      "Municipal-spec compliance (RTA / DoT / MOMRA)",
+   437→      "Hot-applied thermoplastic rated for 50°C+ asphalt",
+   438→      "Glass-bead retroreflectivity for night visibility",
+   439→      "Fast curing — roads reopen in minutes",
+   440→      "5–7 year service life under heavy traffic",
+   441→    ],
+   442→    materials: [
+   443→      "Hot-applied thermoplastic (Type I/II)",
+   444→      "MMA cold plastic",
+   445→      "Reflective glass beads",
+   446→      "Anti-skid aggregate",
+   447→      "Preformed thermoplastic (symbols)",
+   448→    ],
+   449→    equipment: [
+   450→      "Self-propelled thermoplastic applicator",
+   451→      "Hand-push line marker",
+   452→      "Glass-bead dispenser",
+   453→      "Line pre-marking laser",
+   454→      "Surface preparation blower",
+   455→    ],
+   456→    industriesServed: ["highways-roads", "commercial", "residential", "industrial"],
+   457→    faqs: [
+   458→      {
+   459→        question: "How long does thermoplastic road marking last in the UAE climate?",
+   460→        answer:
+   461→          "Properly applied thermoplastic road marking lasts 5–7 years under normal traffic in the Gulf climate. High-stress intersections may require touch-ups every 2–3 years.",
+   462→      },
+   463→      {
+   464→        question: "How soon can traffic resume after marking?",
+   465→        answer:
+   466→          "Hot thermoplastic cures in 2–5 minutes depending on ambient temperature. Roads can typically reopen to traffic within 10 minutes of application.",
+   467→      },
+   468→      {
+   469→        question: "Do you comply with RTA and MOMRA specifications?",
+   470→        answer:
+   471→          "Yes. All line widths, colours, reflectivity and material composition meet local RTA (UAE) and MOMRA (Saudi Arabia) road marking specifications.",
+   472→      },
+   473→    ],
+   474→    heroHeading: "Road Marking — Highway, Urban & Access Roads",
+   475→    heroDescription:
+   476→      "Thermoplastic and MMA road line marking engineered for Gulf heat, UV and heavy traffic — fully compliant with RTA, DoT and MOMRA specifications.",
+   477→    seoTitle: "Road Marking Contractors | Thermoplastic Line Marking UAE & Saudi",
+   478→    seoDescription:
+   479→      "Professional road marking contractors. Hot-applied thermoplastic line marking for highways and urban roads across UAE and Saudi Arabia. RTA & MOMRA compliant.",
+   480→    process: [
+   481→      { step: 1, title: "Site Survey", description: "Assess asphalt condition, traffic volumes and spec requirements." },
+   482→      { step: 2, title: "Surface Prep", description: "Clean, dry and prime the surface for optimal thermoplastic adhesion." },
+   483→      { step: 3, title: "Pre-Marking", description: "Lay laser-guided pre-mark lines for precise geometry." },
+   484→      { step: 4, title: "Application", description: "Apply hot thermoplastic with simultaneous glass-bead dispensing." },
+   485→      { step: 5, title: "QC & Reopen", description: "Verify reflectivity and line width, then reopen to traffic." },
+   486→    ],
+   487→    specs: [
+   488→      { label: "Line width", value: "100–150 mm standard" },
+   489→      { label: "Service life", value: "5–7 years" },
+   490→      { label: "Cure time", value: "2–5 minutes" },
+   491→      { label: "Reflectivity", value: "Class R2/R3 retroreflective" },
+   492→    ],
+   493→  },
+   494→  {
+   495→    slug: "thermoplastic-road-marking",
+   496→    name: "Thermoplastic Road Marking",
+   497→    tagline: "The industry-standard durable line marking system.",
+   498→    shortDescription:
+   499→      "Hot-applied thermoplastic line marking offering superior durability, reflectivity and adhesion — the preferred system for highways and high-traffic roads.",
+   500→    longDescription:
+   501→      "Thermoplastic road marking is the gold standard for durable line marking. Heated to 180–200°C and applied as a melt, it fuses with the asphalt to form a bond that outlasts paint by 5–10×. Embedded glass beads provide retroreflectivity that makes lines glow under headlights. Our thermoplastic systems are formulated for Gulf conditions with UV stabilisers and enhanced softening points to prevent tracking in extreme heat.",
+   502→    icon: "Flame",
+   503→    benefits: [
+   504→      "5–10× longer life than cold paint",
+   505→      "Fuses to asphalt — no peeling",
+   506→      "Built-in retroreflectivity from glass beads",
+   507→      "Skid-resistant aggregate surface",
+   508→      "Low VOC, environmentally stable",
+   509→    ],
+   510→    materials: [
+   511→      "Alkyd / hydrocarbon thermoplastic",
+   512→      "Reflective glass beads (Type I/II)",
+   513→      "Anti-skid aggregate",
+   514→      "Primer/sealer (for concrete)",
+   515→    ],
+   516→    equipment: [
+   517→      "Thermoplastic pre-heater (oil-jacketed kettle)",
+   518→      "Self-propelled applicator",
+   519→      "Extrusion / screed shoe",
+   520→      "Bead dispenser (gravity / pressure)",
+   521→    ],
+   522→    industriesServed: ["highways-roads", "commercial", "industrial", "aviation"],
+   523→    faqs: [
+   524→      {
+   525→        question: "What temperature is thermoplastic applied at?",
+   526→        answer:
+   527→          "Thermoplastic is heated to 180–200°C in an oil-jacketed kettle and applied at 170–190°C to ensure proper fusion with the substrate.",
+   528→      },
+   529→      {
+   530→        question: "Can thermoplastic be applied over existing paint?",
+   531→        answer:
+   532→          "No. Existing paint must be removed by water-blasting or mechanical scarifying so the thermoplastic fuses directly with the asphalt or concrete.",
+   533→      },
+   534→      {
+   535→        question: "Is thermoplastic suitable for concrete surfaces?",
+   536→        answer:
+   537→          "Yes, with a compatible epoxy or solvent primer applied first to promote adhesion between the thermoplastic and the concrete.",
+   538→      },
+   539→    ],
+   540→    heroHeading: "Thermoplastic Road Marking — Durable, Reflective, Compliant",
+   541→    heroDescription:
+   542→      "Hot-applied thermoplastic line marking fused to the road surface for 5–7 year durability with built-in glass-bead retroreflectivity.",
+   543→    seoTitle: "Thermoplastic Road Marking | Hot-Applied Line Marking UAE Saudi",
+   544→    seoDescription:
+   545→      "Thermoplastic road marking contractors in UAE & Saudi Arabia. Hot-applied durable line marking with glass bead reflectivity for highways and roads.",
+   546→    process: [
+   547→      { step: 1, title: "Heat", description: "Melt thermoplastic to 180–200°C in oil-jacketed kettle." },
+   548→      { step: 2, title: "Prepare", description: "Scarify or water-blast old markings, prime concrete." },
+   549→      { step: 3, title: "Apply", description: "Extrude thermoplastic with simultaneous bead dispensing." },
+   550→      { step: 4, title: "Bead", description: "Glass beads embed for retroreflectivity." },
+   551→      { step: 5, title: "Cure", description: "Cool 2–5 minutes, then reopen." },
+   552→    ],
+   553→    specs: [
+   554→      { label: "Application temp", value: "170–190°C" },
+   555→      { label: "Softening point", value: "100–105°C" },
+   556→      { label: "Thickness", value: "2.5–3.0 mm" },
+   557→      { label: "Reflectivity", value: "R2/R3 with glass beads" },
+   558→    ],
+   559→  },
+   560→  {
+   561→    slug: "parking-lot-marking",
+   562→    name: "Parking Lot Marking",
+   563→    tagline: "Maximise capacity and safety in every parking facility.",
+   564→    shortDescription:
+   565→      "Precision parking bay line marking, accessibility stencils, direction arrows and pedestrian walkways for malls, offices and residential towers.",
+   566→    longDescription:
+   567→      "A well-marked parking lot is a revenue asset — optimised bay layout can increase capacity by 10–15%. We design and mark parking facilities with crisp, durable lines that guide drivers, maximise stall count and meet accessibility codes. Our services include bay layout optimisation, disabled-access stencils, directional arrows, pedestrian crossings, speed humps marking and colour-coded zoning for VIP, family and EV bays.",
+   568→    icon: "SquareParking",
+   569→    benefits: [
+   570→      "10–15% capacity optimisation",
+   571→      "Accessible-bay compliance (ADA / local code)",
+   572→      "Crisp, high-visibility lines",
+   573→      "Colour-coded zone marking",
+   574→      "Traffic-flow and pedestrian safety",
+   575→    ],
+   576→    materials: [
+   577→      "Solvent-based acrylic paint",
+   578→      "Water-based traffic paint",
+   579→      "Thermoplastic (high-traffic areas)",
+   580→      "Two-component epoxy",
+   581→      "Preformed symbols (disabled, arrows)",
+   582→    ],
+   583→    equipment: [
+   584→      "Airless line striper",
+   585→      "Hand-push marker",
+   586→      "Stencil kit",
+   587→      "Layout chalk / laser",
+   588→    ],
+   589→    industriesServed: ["commercial", "residential", "healthcare", "aviation"],
+   590→    faqs: [
+   591→      {
+   592→        question: "How long does parking lot marking take?",
+   593→        answer:
+   594→          "A typical 200-bay parking lot is marked in 1–2 days. We work in phases to keep portions of the facility open throughout.",
+   595→      },
+   596→      {
+   597→        question: "Can you re-mark over existing lines?",
+   598→        answer:
+   599→          "We recommend blacking out ghost lines first to avoid driver confusion. Where layout changes, old lines are obscured with black-out paint before new marking.",
+   600→      },
+   601→      {
+   602→        question: "Do you handle accessibility (disabled) bays?",
+   603→        answer:
+   604→          "Yes, we apply all accessibility symbols, bay dimensions and signage to meet local and international accessibility codes.",
+   605→      },
+   606→    ],
+   607→    heroHeading: "Parking Lot Marking — Capacity, Safety, Compliance",
+   608→    heroDescription:
+   609→      "Precision parking bay marking, accessibility stencils and traffic-flow layout that maximise capacity and guide drivers safely.",
+   610→    seoTitle: "Parking Lot Marking | Parking Bay Line Marking UAE Saudi Arabia",
+   611→    seoDescription:
+   612→      "Parking lot marking contractors. Parking bay line marking, accessibility stencils and directional arrows for malls, offices and residential towers.",
+   613→    process: [
+   614→      { step: 1, title: "Layout Audit", description: "Measure and optimise bay layout for capacity." },
+   615→      { step: 2, title: "Ghost Removal", description: "Black out obsolete lines to prevent confusion." },
+   616→      { step: 3, title: "Chalk Layout", description: "Snap chalk lines for crisp geometry." },
+   617→      { step: 4, title: "Stripe", description: "Apply durable traffic paint or thermoplastic." },
+   618→      { step: 5, title: "Stencil", description: "Apply symbols, arrows and accessibility markings." },
+   619→    ],
+   620→    specs: [
+   621→      { label: "Bay width", value: "2.5–3.0 m standard" },
+   622→      { label: "Line width", value: "100 mm" },
+   623→      { label: "Drying time", value: "30–60 min (paint)" },
+   624→      { label: "Capacity gain", value: "Up to 15%" },
+   625→    ],
+   626→  },
+   627→  {
+   628→    slug: "warehouse-marking",
+   629→    name: "Warehouse Marking",
+   630→    tagline: "Organise floor space, protect workers, and guide forklifts.",
+   631→    shortDescription:
+   632→      "Industrial floor marking for warehouses — pedestrian walkways, forklift lanes, hazard zones, storage bays and OSHA / HSE compliant safety zones.",
+   633→    longDescription:
+   634→      "Warehouse floor marking is the backbone of facility safety and 5S organisation. We apply high-durability epoxy and polyurea line systems that survive forklift traffic, pallet drag and chemical spills. Our layouts separate pedestrians from MHE traffic, mark storage locations, identify hazard zones and create the visual workplace that drives operational efficiency and HSE compliance.",
+   635→    icon: "Warehouse",
+   636→    benefits: [
+   637→      "Forklift-grade durability (epoxy / polyurea)",
+   638→      "Pedestrian–MHE traffic separation",
+   639→      "HSE / OSHA compliant hazard zones",
+   640→      "5S visual workplace organisation",
+   641→      "Chemical and impact resistant",
+   642→    ],
+   643→    materials: [
+   644→      "Two-component epoxy line paint",
+   645→      "Polyurea (fast-cure, high-traffic)",
+   646→      "MMA cold plastic",
+   647→      "Anti-slip aggregate",
+   648→      "Preformed hazard tape",
+   649→    ],
+   650→    equipment: [
+   651→      "Airless epoxy sprayer",
+   652→      "Hand-push marker",
+   653→      "Walk-behind grinder (surface prep)",
+   654→      "Stencil system",
+   655→    ],
+   656→    industriesServed: ["industrial", "logistics", "retail", "aviation"],
+   657→    faqs: [
+   658→      {
+   659→        question: "How long does warehouse floor marking last under forklift traffic?",
+   660→        answer:
+   661→          "Epoxy marking typically lasts 2–4 years under moderate forklift traffic; polyurea systems can last 4–6 years in high-traffic aisles.",
+   662→      },
+   663→      {
+   664→        question: "Can marking be applied over sealed concrete?",
+   665→        answer:
+   666→          "Yes, after mechanical grinding or shot-blasting to profile the surface and ensure epoxy adhesion. We always test coating compatibility first.",
+   667→      },
+   668→      {
+   669→        question: "How quickly can the warehouse stay operational?",
+   670→        answer:
+   671→          "Polyurea systems cure in 1–2 hours, allowing phased application with minimal downtime. Epoxy requires 12–24 hours before traffic.",
+   672→      },
+   673→    ],
+   674→    heroHeading: "Warehouse Marking — Forklift-Grade Safety & 5S Organisation",
+   675→    heroDescription:
+   676→      "Industrial floor marking for warehouses — pedestrian lanes, forklift aisles, hazard zones and storage bays in durable epoxy and polyurea.",
+   677→    seoTitle: "Warehouse Floor Marking | Industrial Line Marking UAE Saudi",
+   678→    seoDescription:
+   679→      "Warehouse marking contractors. Forklift-grade epoxy and polyurea floor marking for pedestrian lanes, hazard zones and 5S organisation in UAE & Saudi Arabia.",
+   680→    process: [
+   681→      { step: 1, title: "Surface Prep", description: "Grind or shot-blast concrete for adhesion." },
+   682→      { step: 2, title: "Layout", description: "Mark pedestrian, forklift and hazard zones to HSE plan." },
+   683→      { step: 3, title: "Prime", description: "Apply epoxy primer for chemical bond." },
+   684→      { step: 4, title: "Stripe", description: "Apply epoxy or polyurea line system." },
+   685→      { step: 5, title: "Cure", description: "Polyurea: 1–2 hrs. Epoxy: 12–24 hrs." },
+   686→    ],
+   687→    specs: [
+   688→      { label: "System", value: "Epoxy / Polyurea / MMA" },
+   689→      { label: "Service life", value: "2–6 years" },
+   690→      { label: "Cure time", value: "1 hr (polyurea) – 24 hr (epoxy)" },
+   691→      { label: "Lane width", value: "100–150 mm" },
+   692→    ],
+   693→  },
+   694→  {
+   695→    slug: "airport-marking",
+   696→    name: "Airport Marking",
+   697→    tagline: "Precision airside marking to ICAO Annex 14 standards.",
+   698→    shortDescription:
+   699→      "Runway, taxiway and apron marking compliant with ICAO Annex 14 — including threshold bars, holding positions, centrelines and guidance signs.",
+   700→    longDescription:
+   701→      "Airside marking demands zero compromise. We apply runway and taxiway markings to ICAO Annex 14 specifications using MMA and preformed thermoplastic systems engineered for jet-blast resistance, fuel spill tolerance and high retroreflectivity in all weather. Our crews are airside-operations trained and work under strict NOTAM coordination to minimise runway downtime.",
+   702→    icon: "Plane",
+   703→    benefits: [
+   704→      "ICAO Annex 14 compliant",
+   705→      "Jet-blast and fuel-spill resistant",
+   706→      "High retroreflectivity (wet & dry)",
+   707→      "MMA fast-cure for minimal downtime",
+   708→      "Airside-operations trained crews",
+   709→    ],
+   710→    materials: [
+   711→      "MMA cold plastic (Type III)",
+   712→      "Preformed thermoplastic",
+   713→      "Airport-grade glass beads",
+   714→      "Type II/III retroreflective media",
+   715→    ],
+   716→    equipment: [
+   717→      "MMA extrusion applicator",
+   718→      "Preformed thermoplastic heater",
+   719→      "Bead dispenser",
+   720→      "Airside survey equipment",
+   721→    ],
+   722→    industriesServed: ["aviation", "industrial"],
+   723→    faqs: [
+   724→      {
+   725→        question: "Do you comply with ICAO Annex 14?",
+   726→        answer:
+   727→          "Yes. All runway, taxiway and apron markings follow ICAO Annex 14 dimensions, colours and reflectivity, with Type III MMA systems for durability.",
+   728→      },
+   729→      {
+   730→        question: "How do you minimise runway downtime?",
+   731→        answer:
+   732→          "MMA cold plastic cures in 30–45 minutes, allowing markings to be applied and reopened within a single night-shift NOTAM window.",
+   733→      },
+   734→      {
+   735→        question: "Are your crews airside-trained?",
+   736→        answer:
+   737→          "Yes. All airside personnel hold valid airside driving permits and follow the airport's safety management system (SMS).",
+   738→      },
+   739→    ],
+   740→    heroHeading: "Airport Marking — ICAO Annex 14 Airside Precision",
+   741→    heroDescription:
+   742→      "Runway, taxiway and apron marking compliant with ICAO Annex 14 — jet-blast resistant MMA systems with high retroreflectivity.",
+   743→    seoTitle: "Airport Marking | Runway & Taxiway Marking ICAO Annex 14",
+   744→    seoDescription:
+   745→      "Airport marking contractors. ICAO Annex 14 compliant runway, taxiway and apron marking with MMA systems across UAE & Saudi Arabia airports.",
+   746→    process: [
+   747→      { step: 1, title: "NOTAM Plan", description: "Coordinate marking windows with airside operations." },
+   748→      { step: 2, title: "Survey", description: "Lay out markings to Annex 14 geometry." },
+   749→      { step: 3, title: "Prepare", description: "Water-blast and dry the surface." },
+   750→      { step: 4, title: "Apply MMA", description: "Extrude Type III MMA with beads." },
+   751→      { step: 5, title: "Cure & Inspect", description: "30–45 min cure, then QC reflectivity." },
+   752→    ],
+   753→    specs: [
+   754→      { label: "Standard", value: "ICAO Annex 14" },
+   755→      { label: "System", value: "MMA Type III" },
+   756→      { label: "Cure time", value: "30–45 minutes" },
+   757→      { label: "Reflectivity", value: "Type II/III wet & dry" },
+   758→    ],
+   759→  },
+   760→  {
+   761→    slug: "industrial-marking",
+   762→    name: "Industrial Marking",
+   763→    tagline: "Heavy-duty marking for factories, plants and heavy industry.",
+   764→    shortDescription:
+   765→      "Chemical and heat-resistant floor marking for factories, refineries and plants — hazard zones, equipment zones, pipe identification and safety walkways.",
+   766→    longDescription:
+   767→      "Industrial facilities demand marking that survives oil, chemicals, heat and heavy machinery. We deploy polyurea, epoxy and MMA systems rated for petrochemical plants, steel mills and manufacturing floors. Our industrial marking covers hazard delineation, equipment footprints, pedestrian safe routes, pipe and valve identification, and OSHA / HSE colour-coded safety zones.",
+   768→    icon: "Factory",
+   769→    benefits: [
+   770→      "Chemical & oil resistant",
+   771→      "Heat tolerant (up to 120°C surface)",
+   772→      "Heavy-machinery impact resistant",
+   773→      "HSE / OSHA colour compliance",
+   774→      "Pipe & valve identification",
+   775→    ],
+   776→    materials: [
+   777→      "Polyurea (high chemical resistance)",
+   778→      "Novolac epoxy (chemical resistant)",
+   779→      "MMA cold plastic",
+   780→      "Anti-slip aggregate",
+   781→      "High-temp silicone (up to 300°C)",
+   782→    ],
+   783→    equipment: [
+   784→      "Airless sprayer (high-pressure)",
+   785→      "Surface grinder",
+   786→      "Stencil system",
+   787→      "Pipe-banding applicator",
+   788→    ],
+   789→    industriesServed: ["industrial", "oil-gas", "energy", "logistics"],
+   790→    faqs: [
+   791→      {
+   792→        question: "Can marking survive oil and chemical spills?",
+   793→        answer:
+   794→          "Novolac epoxy and polyurea systems resist oils, fuels, acids and alkalis. We select the chemistry based on the specific chemicals present in your facility.",
+   795→      },
+   796→      {
+   797→        question: "Do you mark pipes and valves?",
+   798→        answer:
+   799→          "Yes. We apply colour-coded pipe banding and valve identification to ASME A13.1 / local standards for complete plant identification.",
+   800→      },
+   801→      {
+   802→        question: "Can marking tolerate high surface temperatures?",
+   803→        answer:
+   804→          "For surfaces up to 120°C we use polyurea; for higher temperatures near furnaces we apply high-temperature silicone-based marking systems.",
+   805→      },
+   806→    ],
+   807→    heroHeading: "Industrial Marking — Chemical, Heat & Impact Resistant",
+   808→    heroDescription:
+   809→      "Heavy-duty floor marking for factories and plants — polyurea and epoxy systems that survive oil, chemicals, heat and heavy machinery.",
+   810→    seoTitle: "Industrial Floor Marking | Factory & Plant Marking UAE Saudi",
+   811→    seoDescription:
+   812→      "Industrial marking contractors. Chemical and heat resistant polyurea and epoxy floor marking for factories, refineries and plants in UAE & Saudi Arabia.",
+   813→    process: [
+   814→      { step: 1, title: "Chemical Audit", description: "Identify chemicals and temperatures present." },
+   815→      { step: 2, title: "System Selection", description: "Choose polyurea, novolac epoxy or MMA." },
+   816→      { step: 3, title: "Surface Prep", description: "Grind and profile the substrate." },
+   817→      { step: 4, title: "Apply", description: "Spray or extrude the line system." },
+   818→      { step: 5, title: "Cure & Handover", description: "Cure and apply identification stencils." },
+   819→    ],
+   820→    specs: [
+   821→      { label: "Chemical resistance", value: "Oils, fuels, acids, alkalis" },
+   822→      { label: "Temp tolerance", value: "Up to 300°C (silicone)" },
+   823→      { label: "Service life", value: "3–8 years" },
+   824→      { label: "Standards", value: "OSHA / HSE / ASME A13.1" },
+   825→    ],
+   826→  },
+   827→  {
+   828→    slug: "safety-signage",
+   829→    name: "Safety Signage",
+   830→    tagline: "Visual safety systems that protect people and assets.",
+   831→    shortDescription:
+   832→      "Manufacture and install safety signage, traffic signs, hazard signs, wayfinding and regulatory signage compliant with local and ISO standards.",
+   833→    longDescription:
+   834→      "Safety signage is the silent guardian of every facility. We manufacture and install reflective traffic signs, hazard warning signs, mandatory and prohibition signs, emergency escape signage and complete wayfinding systems. All signs are produced to ISO 7010, MUTCD-Local and RTA/MOMRA standards using retroreflective sheeting and weather-resistant substrates built for Gulf UV exposure.",
+   835→    icon: "ShieldAlert",
+   836→    benefits: [
+   837→      "ISO 7010 pictogram compliance",
+   838→      "Retroreflective (Type I–IV) sheeting",
+   839→      "UV and weather resistant",
+   840→      "Custom wayfinding systems",
+   841→      "Regulatory traffic signs (RTA/MOMRA)",
+   842→    ],
+   843→    materials: [
+   844→      "Engineer-grade reflective sheeting",
+   845→      "High-intensity prismatic (Type III)",
+   846→      "Diamond-grade (Type IV)",
+   847→      "Aluminium substrate",
+   848→      "UV-stable digital print",
+   849→    ],
+   850→    equipment: [
+   851→      "Digital flatbed printer",
+   852→      "Plotter cutter",
+   853→      "Hydraulic press (sign forming)",
+   854→      "Powder-coat booth",
+   855→    ],
+   856→    industriesServed: ["industrial", "commercial", "healthcare", "aviation", "oil-gas"],
+   857→    faqs: [
+   858→      {
+   859→        question: "Are your safety signs ISO 7010 compliant?",
+   860→        answer:
+   861→          "Yes. All hazard, mandatory, prohibition and emergency signs use ISO 7010 standard pictograms with the correct colour and shape coding.",
+   862→      },
+   863→      {
+   864→        question: "What reflectivity grade do you recommend for roads?",
+   865→        answer:
+   866→          "For urban roads we recommend Type III high-intensity prismatic; for highways and high-speed roads, Type IV diamond-grade for maximum night visibility.",
+   867→      },
+   868→      {
+   869→        question: "Can you produce custom wayfinding systems?",
+   870→        answer:
+   871→          "Yes. We design and manufacture complete custom wayfinding systems including directional, identification and informational signage with your brand.",
+   872→      },
+   873→    ],
+   874→    heroHeading: "Safety Signage — ISO 7010 Compliant Visual Safety",
+   875→    heroDescription:
+   876→      "Reflective traffic signs, hazard signage and wayfinding systems manufactured to ISO 7010 with UV-stable retroreflective sheeting.",
+   877→    seoTitle: "Safety Signage | Traffic & Hazard Signs ISO 7010 UAE Saudi",
+   878→    seoDescription:
+   879→      "Safety signage manufacturers. Retroreflective traffic signs, hazard signs and wayfinding systems compliant with ISO 7010 across UAE & Saudi Arabia.",
+   880→    process: [
+   881→      { step: 1, title: "Survey", description: "Audit site for required signage and compliance gaps." },
+   882→      { step: 2, title: "Design", description: "Design signs to ISO 7010 / local standards." },
+   883→      { step: 3, title: "Manufacture", description: "Print and form on reflective aluminium." },
+   884→      { step: 4, title: "Install", description: "Install with galvanised posts or wall mounts." },
+   885→      { step: 5, title: "Inspect", description: "Verify reflectivity, height and visibility." },
+   886→    ],
+   887→    specs: [
+   888→      { label: "Standard", value: "ISO 7010 / MUTCD-Local" },
+   889→      { label: "Sheeting", value: "Type I–IV retroreflective" },
+   890→      { label: "Substrate", value: "3mm aluminium" },
+   891→      { label: "UV warranty", value: "7–10 years" },
+   892→    ],
+   893→  },
+   894→  {
+   895→    slug: "epoxy-flooring",
+   896→    name: "Epoxy Flooring",
+   897→    tagline: "Seamless, durable, decorative industrial floor systems.",
+   898→    shortDescription:
+   899→      "High-build epoxy, polyurethane and self-levelling floor systems for warehouses, factories, parking decks and commercial spaces — seamless and chemical resistant.",
+   900→    longDescription:
+   901→      "Epoxy flooring transforms concrete into a seamless, hygienic, chemical-resistant surface that lasts 10–15 years. We install self-levelling epoxy for warehouses, anti-static epoxy for electronics, polyurethane for car-park decks and decorative flake systems for showrooms. Every system includes moisture testing, surface preparation by shot-blasting, and a primer coat engineered for the substrate condition.",
+   902→    icon: "Layers",
+   903→    benefits: [
+   904→      "Seamless, hygienic, easy-clean surface",
+   905→      "10–15 year service life",
+   906→      "Chemical and stain resistant",
+   907→      "Decorative flake / metallic finishes",
+   908→      "Anti-static & conductive options",
+   909→    ],
+   910→    materials: [
+   911→      "Epoxy primer",
+   912→      "Self-levelling epoxy screed",
+   913→      "Polyurethane topcoat (UV stable)",
+   914→      "Decorative vinyl flakes",
+   915→      "Conductive carbon primer (ESD)",
+   916→    ],
+   917→    equipment: [
+   918→      "Shot-blaster (surface prep)",
+   919→      "Diamond grinder",
+   920→      "Squeegee & roller system",
+   921→      "Notched trowel / spiked roller",
+   922→    ],
+   923→    industriesServed: ["industrial", "commercial", "healthcare", "logistics"],
+   924→    faqs: [
+   925→      {
+   926→        question: "How long does epoxy flooring last?",
+   927→        answer:
+   928→          "A properly installed epoxy floor lasts 10–15 years in commercial environments and 5–10 years in heavy-industrial settings before requiring recoating.",
+   929→      },
+   930→      {
+   931→        question: "Can epoxy be installed over damp concrete?",
+   932→        answer:
+   933→          "We test moisture vapour transmission first. For damp slabs we use moisture-mitigating primers or polyurea systems that tolerate higher vapour pressure.",
+   934→      },
+   935→      {
+   936→        question: "How soon can the floor be used after installation?",
+   937→        answer:
+   938→          "Light foot traffic after 12–24 hours; light vehicle traffic after 48 hours; full chemical/heavy traffic after 7 days for full cure.",
+   939→      },
+   940→    ],
+   941→    heroHeading: "Epoxy Flooring — Seamless Industrial & Commercial Systems",
+   942→    heroDescription:
+   943→      "Self-levelling epoxy, polyurethane and decorative floor systems — seamless, chemical resistant and built for 10–15 year service life.",
+   944→    seoTitle: "Epoxy Flooring Contractors | Industrial Epoxy Floors UAE Saudi",
+   945→    seoDescription:
+   946→      "Epoxy flooring contractors. Self-levelling epoxy, polyurethane and decorative floor systems for warehouses, factories and commercial spaces in UAE & Saudi.",
+   947→    process: [
+   948→      { step: 1, title: "Moisture Test", description: "Test vapour transmission and substrate condition." },
+   949→      { step: 2, title: "Shot-Blast", description: "Profile the concrete for mechanical bond." },
+   950→      { step: 3, title: "Prime", description: "Apply epoxy primer (mitigate moisture if needed)." },
+   951→      { step: 4, title: "Screed", description: "Apply self-levelling epoxy or build coat." },
+   952→      { step: 5, title: "Topcoat", description: "Apply UV-stable polyurethane topcoat." },
+   953→    ],
+   954→    specs: [
+   955→      { label: "Thickness", value: "1.5–4.0 mm" },
+   956→      { label: "Service life", value: "10–15 years" },
+   957→      { label: "Foot traffic", value: "12–24 hours" },
+   958→      { label: "Full cure", value: "7 days" },
+   959→    ],
+   960→  },
+   961→];
+   962→
+   963→// ---------------------------------------------------------------------------
+   964→// INDUSTRIES
+   965→// ---------------------------------------------------------------------------
+   966→
+   967→export const industries: Industry[] = [
+   968→  {
+   969→    slug: "highways-roads",
+   970→    name: "Highways & Roads",
+   971→    description:
+   972→      "Municipal and highway-authority road marking for urban arterials, ring roads and inter-city highways.",
+   973→    icon: "Road",
+   974→    challenges: [
+   975→      "High traffic volume minimises closure windows",
+   976→      "Extreme UV degrades conventional paint",
+   977→      "Heavy HGV traffic abrades lines",
+   978→    ],
+   979→    solutions: [
+   980→      "Night-shift thermoplastic application",
+   981→      "UV-stabilised thermoplastic formulation",
+   982→      "Glass-bead retroreflectivity for night driving",
+   983→    ],
+   984→    services: ["road-marking", "thermoplastic-road-marking", "safety-signage"],
+   985→  },
+   986→  {
+   987→    slug: "commercial",
+   988→    name: "Commercial & Retail",
+   989→    description:
+   990→      "Malls, offices, hotels and retail complexes — parking, wayfinding and safety marking.",
+   991→    icon: "Building2",
+   992→    challenges: [
+   993→      "Maximising parking revenue per m²",
+   994→      "High pedestrian safety requirement",
+   995→      "Brand-consistent aesthetics",
+   996→    ],
+   997→    solutions: [
+   998→      "Bay-layout capacity optimisation",
+   999→      "Pedestrian crossing and walkway marking",
+  1000→      "Colour-coded and custom-stencil branding",
+  1001→    ],
+  1002→    services: ["parking-lot-marking", "safety-signage", "epoxy-flooring"],
+  1003→  },
+  1004→  {
+  1005→    slug: "industrial",
+  1006→    name: "Industrial & Manufacturing",
+  1007→    description:
+  1008→      "Factories, plants and manufacturing floors requiring chemical and impact-resistant marking.",
+  1009→    icon: "Factory",
+  1010→    challenges: [
+  1011→      "Forklift and machinery abrasion",
+  1012→      "Chemical and oil exposure",
+  1013→      "HSE compliance for traffic segregation",
+  1014→    ],
+  1015→    solutions: [
+  1016→      "Polyurea and epoxy line systems",
+  1017→      "5S visual workplace layout",
+  1018→      "OSHA/HSE colour-coded hazard zones",
+  1019→    ],
+  1020→    services: ["warehouse-marking", "industrial-marking", "epoxy-flooring", "safety-signage"],
+  1021→  },
+  1022→  {
+  1023→    slug: "logistics",
+  1024→    name: "Logistics & Warehousing",
+  1025→    description:
+  1026→      "Distribution centres, cold storage and freight hubs — high-bay marking and traffic management.",
+  1027→    icon: "Truck",
+  1028→    challenges: [
+  1029→      "24/7 operation — minimal downtime",
+  1030→      "Mixed pedestrian and forklift traffic",
+  1031→      "Cold-storage adhesion challenges",
+  1032→    ],
+  1033→    solutions: [
+  1034→      "Fast-cure polyurea for minimal downtime",
+  1035→      "Clearly segregated traffic lanes",
+  1036→      "Cold-tolerant epoxy formulations",
+  1037→    ],
+  1038→    services: ["warehouse-marking", "industrial-marking", "epoxy-flooring"],
+  1039→  },
+  1040→  {
+  1041→    slug: "aviation",
+  1042→    name: "Aviation & Airports",
+  1043→    description:
+  1044→      "Runways, taxiways and aprons requiring ICAO Annex 14 compliant marking.",
+  1045→    icon: "Plane",
+  1046→    challenges: [
+  1047→      "Strict ICAO Annex 14 compliance",
+  1048→      "Jet-blast and fuel-spill exposure",
+  1049→      "Minimal runway closure windows",
+  1050→    ],
+  1051→    solutions: [
+  1052→      "Type III MMA marking systems",
+  1053→      "Jet-blast resistant formulations",
+  1054→      "Night-shift NOTAM-coordinated application",
+  1055→    ],
+  1056→    services: ["airport-marking", "road-marking", "safety-signage"],
+  1057→  },
+  1058→  {
+  1059→    slug: "oil-gas",
+  1060→    name: "Oil & Gas / Petrochemical",
+  1061→    description:
+  1062→      "Refineries, terminals and petrochemical plants — hazardous-zone marking and identification.",
+  1063→    icon: "Flame",
+  1064→    challenges: [
+  1065→      "Hydrocarbon and chemical exposure",
+  1066→      "ATEX / hazardous-zone requirements",
+  1067→      "High ambient temperatures",
+  1068→    ],
+  1069→    solutions: [
+  1070→      "Novolac epoxy and polyurea systems",
+  1071→      "Pipe and valve identification (ASME A13.1)",
+  1072→      "High-temperature silicone marking",
+  1073→    ],
+  1074→    services: ["industrial-marking", "warehouse-marking", "safety-signage"],
+  1075→  },
+  1076→  {
+  1077→    slug: "residential",
+  1078→    name: "Residential & Communities",
+  1079→    description:
+  1080→      "Villas, towers and gated communities — parking, speed calming and safety marking.",
+  1081→    icon: "Home",
+  1082→    challenges: [
+  1083→      "Aesthetic requirements",
+  1084→      "Pedestrian and child safety",
+  1085→      "Low-noise application",
+  1086→    ],
+  1087→    solutions: [
+  1088→      "Decorative and colour-matched lines",
+  1089→      "Speed-hump and pedestrian marking",
+  1090→      "Quiet daytime application windows",
+  1091→    ],
+  1092→    services: ["parking-lot-marking", "road-marking", "safety-signage"],
+  1093→  },
+  1094→  {
+  1095→    slug: "healthcare",
+  1096→    name: "Healthcare & Institutional",
+  1097→    description:
+  1098→      "Hospitals, clinics and institutions — hygienic, accessible and wayfinding marking.",
+  1099→    icon: "HeartPulse",
+  1100→    challenges: [
+  1101→      "Hygiene and infection control",
+  1102→      "Accessibility compliance",
+  1103→      "Complex wayfinding",
+  1104→    ],
+  1105→    solutions: [
+  1106→      "Seamless epoxy floors (hygienic)",
+  1107→      "Accessibility marking and signage",
+  1108→      "Complete wayfinding systems",
+  1109→    ],
+  1110→    services: ["epoxy-flooring", "safety-signage", "parking-lot-marking"],
+  1111→  },
+  1112→  {
+  1113→    slug: "energy",
+  1114→    name: "Energy & Utilities",
+  1115→    description:
+  1116→      "Power plants, substations and renewable energy sites — safety and identification marking.",
+  1117→    icon: "Zap",
+  1118→    challenges: [
+  1119→      "High-voltage safety zones",
+  1120→      "Outdoor UV exposure",
+  1121→      "Regulatory identification",
+  1122→    ],
+  1123→    solutions: [
+  1124→      "OSHA colour-coded safety zones",
+  1125→      "UV-stable reflective signage",
+  1126→      "Equipment and hazard identification",
+  1127→    ],
+  1128→    services: ["industrial-marking", "safety-signage", "epoxy-flooring"],
+  1129→  },
+  1130→  {
+  1131→    slug: "retail",
+  1132→    name: "Retail & Showrooms",
+  1133→    description:
+  1134→      "Showrooms and retail floors — decorative epoxy and branded marking.",
+  1135→    icon: "ShoppingBag",
+  1136→    challenges: [
+  1137→      "Premium aesthetic requirement",
+  1138→      "High foot traffic",
+  1139→      "Brand consistency",
+  1140→    ],
+  1141→    solutions: [
+  1142→      "Decorative flake and metallic epoxy",
+  1143→      "Custom stencilled branding",
+  1144→      "High-build wear layers",
+  1145→    ],
+  1146→    services: ["epoxy-flooring", "parking-lot-marking", "safety-signage"],
+  1147→  },
+  1148→];
+  1149→
+  1150→// ---------------------------------------------------------------------------
+  1151→// PROJECTS — real-world project portfolio
+  1152→// ---------------------------------------------------------------------------
+  1153→
+  1154→export const projects: Project[] = [
+  1155→  {
+  1156→    slug: "abu-dhabi-highway-thermoplastic",
+  1157→    title: "Abu Dhabi–Al Ain Highway Thermoplastic Marking",
+  1158→    country: "uae",
+  1159→    city: "abu-dhabi",
+  1160→    service: "thermoplastic-road-marking",
+  1161→    industry: "highways-roads",
+  1162→    client: "Confidential Transport Authority",
+  1163→    year: 2024,
+  1164→    duration: "6 weeks",
+  1165→    challenge:
+  1166→      "Re-mark 42 km of a high-speed inter-city highway with minimal lane closures during peak pilgrimage and commuter traffic, while upgrading reflectivity to night-driving standards.",
+  1167→    solution:
+  1168→      "Deployed two self-propelled thermoplastic applicators operating in night-shift windows between 11pm and 5am, applying hot thermoplastic with simultaneous glass-bead dispensing across all three lanes plus hard-shoulder.",
+  1169→    execution:
+  1170→      "Crews pre-marked with laser guidance, water-blasted ghost lines, and applied 3.0 mm thermoplastic at 185°C. Reflectivity tested every 500 m to R3 specification. Total of 168 km of line applied.",
+  1171→    materials: ["Hydrocarbon thermoplastic", "Type II glass beads", "Anti-skid aggregate"],
+  1172→    equipment: ["Self-propelled applicator ×2", "Oil-jacketed kettle", "Water-blaster", "Reflectometer"],
+  1173→    results: [
+  1174→      { label: "Distance marked", value: "42 km" },
+  1175→      { label: "Line applied", value: "168 km" },
+  1176→      { label: "Night closures", value: "28 shifts" },
+  1177→      { label: "Reflectivity", value: "R3 achieved" },
+  1178→    ],
+  1179→    gallery: [
+  1180→      { alt: "Highway thermoplastic line marking at night", caption: "Night-shift application on E22" },
+  1181→      { alt: "Glass bead dispenser in operation", caption: "Simultaneous bead dispensing" },
+  1182→    ],
+  1183→    location: "E22 Highway, Abu Dhabi – Al Ain",
+  1184→    area: "42 km",
+  1185→  },
+  1186→  {
+  1187→    slug: "dubai-mall-parking-marking",
+  1188→    title: "Dubai Mega-Mall Parking Deck Marking",
+  1189→    country: "uae",
+  1190→    city: "dubai",
+  1191→    service: "parking-lot-marking",
+  1192→    industry: "commercial",
+  1193→    client: "Confidential Retail Group",
+  1194→    year: 2024,
+  1195→    duration: "12 days",
+  1196→    challenge:
+  1197→      "Re-mark a 3,200-bay multi-level parking deck without closing the mall, while re-optimising the layout to increase capacity and add EV and family bays.",
+  1198→    solution:
+  1199→      "Phased floor-by-floor marking with black-out of ghost lines, layout re-optimisation adding 240 bays, and colour-coded zones (green family, blue disabled, amber EV, red VIP).",
+  1200→    execution:
+  1201→      "Surveyed and re-laid bay geometry for capacity gain, applied solvent-based acrylic paint with preformed disabled and arrow symbols, and added pedestrian walkways with anti-skip hatch.",
+  1202→    materials: ["Solvent acrylic paint", "Preformed symbols", "Black-out paint", "Anti-skid hatch"],
+  1203→    equipment: ["Airless line striper", "Hand-push marker", "Stencil kit", "Laser chalk line"],
+  1204→    results: [
+  1205→      { label: "Bays marked", value: "3,440" },
+  1206→      { label: "Capacity gain", value: "+240 bays (7.5%)" },
+  1207→      { label: "Levels", value: "6" },
+  1208→      { label: "Mall downtime", value: "Zero" },
+  1209→    ],
+  1210→    gallery: [
+  1211→      { alt: "Colour-coded parking bays in Dubai mall", caption: "Zone-coded parking deck" },
+  1212→      { alt: "Disabled bay stencil application", caption: "Accessibility stencils" },
+  1213→    ],
+  1214→    location: "Sheikh Zayed Road, Dubai",
+  1215→    area: "48,000 m²",
+  1216→  },
+  1217→  {
+  1218→    slug: "riyadh-warehouse-epoxy-marking",
+  1219→    title: "Riyadh Logistics Hub Warehouse Floor Marking",
+  1220→    country: "saudi-arabia",
+  1221→    city: "riyadh",
+  1222→    service: "warehouse-marking",
+  1223→    industry: "logistics",
+  1224→    client: "Confidential 3PL Provider",
+  1225→    year: 2024,
+  1226→    duration: "3 weeks",
+  1227→    challenge:
+  1228→      "Mark 22,000 m² of a 24/7 logistics warehouse with forklift lanes, pedestrian walkways, and storage bays, while keeping the facility operational throughout.",
+  1229→    solution:
+  1230→      "Used fast-cure polyurea line systems applied in sectioned phases, with HSE-compliant colour coding: green pedestrian, amber forklift, red hazard, white storage.",
+  1231→    execution:
+  1232→      "Shot-blasted the concrete, applied polyurea lines curing in 90 minutes, and phased the warehouse into 12 zones so each could reopen within 2 hours of marking.",
+  1233→    materials: ["Polyurea line paint", "Anti-slip aggregate", "Epoxy primer"],
+  1234→    equipment: ["Shot-blaster", "Airless sprayer", "Hand-push marker"],
+  1235→    results: [
+  1236→      { label: "Area marked", value: "22,000 m²" },
+  1237→      { label: "Downtime", value: "<2 hrs per zone" },
+  1238→      { label: "Service life", value: "5+ years" },
+  1239→      { label: "Zones", value: "12" },
+  1240→    ],
+  1241→    gallery: [
+  1242→      { alt: "Warehouse floor with forklift and pedestrian lanes", caption: "HSE colour-coded layout" },
+  1243→      { alt: "Polyurea line application", caption: "Fast-cure polyurea striping" },
+  1244→    ],
+  1245→    location: "Riyadh Logistics City",
+  1246→    area: "22,000 m²",
+  1247→  },
+  1248→  {
+  1249→    slug: "jubail-petrochemical-hazard-marking",
+  1250→    title: "Jubail Petrochemical Plant Hazard Marking",
+  1251→    country: "saudi-arabia",
+  1252→    city: "jubail",
+  1253→    service: "industrial-marking",
+  1254→    industry: "oil-gas",
+  1255→    client: "Confidential Petrochemical Operator",
+  1256→    year: 2023,
+  1257→    duration: "5 weeks",
+  1258→    challenge:
+  1259→      "Mark hazardous zones, pipe identification and emergency escape routes across a live petrochemical plant with hydrocarbon exposure and ATEX requirements.",
+  1260→    solution:
+  1261→      "Applied novolac epoxy and polyurea systems rated for hydrocarbon exposure, with ASME A13.1 pipe banding and photoluminescent emergency escape route marking.",
+  1262→    execution:
+  1263→      "Conducted chemical audit, ground and profiled surfaces, applied novolac epoxy in hazardous zones and polyurea in traffic areas, and installed pipe banding on 14 km of pipework.",
+  1264→    materials: ["Novolac epoxy", "Polyurea", "Photoluminescent tape", "ASME A13.1 banding"],
+  1265→    equipment: ["Airless sprayer", "Surface grinder", "Pipe-band applicator"],
+  1266→    results: [
+  1267→      { label: "Plant area", value: "18,000 m²" },
+  1268→      { label: "Pipework identified", value: "14 km" },
+  1269→      { label: "Escape routes", value: "2.4 km" },
+  1270→      { label: "ATEX zones", value: "All compliant" },
+  1271→    ],
+  1272→    gallery: [
+  1273→      { alt: "Petrochemical plant hazard zone marking", caption: "Novolac epoxy hazard zones" },
+  1274→      { alt: "Pipe identification banding", caption: "ASME A13.1 pipe banding" },
+  1275→    ],
+  1276→    location: "Jubail Industrial City",
+  1277→    area: "18,000 m²",
+  1278→  },
+  1279→  {
+  1280→    slug: "dammam-airport-taxiway-marking",
+  1281→    title: "Dammam Airport Taxiway Marking Upgrade",
+  1282→    country: "saudi-arabia",
+  1283→    city: "dammam",
+  1284→    service: "airport-marking",
+  1285→    industry: "aviation",
+  1286→    client: "Confidential Airport Operator",
+  1287→    year: 2023,
+  1288→    duration: "4 weeks",
+  1289→    challenge:
+  1290→      "Upgrade taxiway and apron markings to ICAO Annex 14 within night-shift NOTAM windows, with jet-blast resistance and high wet-reflectivity.",
+  1291→    solution:
+  1292→      "Applied Type III MMA cold plastic with Type II glass beads across taxiway centrelines, holding positions and apron stand markings, all within 4-hour NOTAM windows.",
+  1293→    execution:
+  1294→      "Surveyed to Annex 14 geometry, water-blasted and dried surfaces, extruded MMA at night, achieving 30-minute cure and reopening within each NOTAM window.",
+  1295→    materials: ["MMA Type III", "Type II glass beads", "Preformed holding-position"],
+  1296→    equipment: ["MMA extrusion applicator", "Bead dispenser", "Airside survey kit"],
+  1297→    results: [
+  1298→      { label: "Taxiway marked", value: "6.4 km" },
+  1299→      { label: "Apron stands", value: "12" },
+  1300→      { label: "NOTAM windows", value: "18 nights" },
+  1301→      { label: "Cure time", value: "30 min" },
+  1302→    ],
+  1303→    gallery: [
+  1304→      { alt: "Airport taxiway centreline marking", caption: "MMA taxiway centrelines" },
+  1305→      { alt: "Apron stand marking at night", caption: "Apron stand numbering" },
+  1306→    ],
+  1307→    location: "King Fahd International Airport, Dammam",
+  1308→    area: "6.4 km taxiway",
+  1309→  },
+  1310→  {
+  1311→    slug: "sharjah-factory-epoxy-floor",
+  1312→    title: "Sharjah Manufacturing Facility Epoxy Floor",
+  1313→    country: "uae",
+  1314→    city: "sharjah",
+  1315→    service: "epoxy-flooring",
+  1316→    industry: "industrial",
+  1317→    client: "Confidential Manufacturer",
+  1318→    year: 2024,
+  1319→    duration: "10 days",
+  1320→    challenge:
+  1321→      "Install a hygienic, chemical-resistant floor across a 4,500 m² manufacturing facility with minimal production downtime and strict hygiene requirements.",
+  1322→    solution:
+  1323→      "Installed a 3 mm self-levelling epoxy system with novolac topcoat in chemical-handling zones, phased over two weekend shutdowns.",
+  1324→    execution:
+  1325→      "Tested moisture vapour, shot-blasted the slab, applied epoxy primer, self-levelling screed and a UV-stable polyurethane topcoat with coved skirting for hygiene.",
+  1326→    materials: ["Epoxy primer", "Self-levelling screed", "Novolac topcoat", "Polyurethane sealer"],
+  1327→    equipment: ["Shot-blaster", "Diamond grinder", "Notched trowel", "Spiked roller"],
+  1328→    results: [
+  1329→      { label: "Area installed", value: "4,500 m²" },
+  1330→      { label: "System", value: "3 mm self-levelling" },
+  1331→      { label: "Downtime", value: "2 weekends" },
+  1332→      { label: "Service life", value: "12–15 years" },
+  1333→    ],
+  1334→    gallery: [
+  1335→      { alt: "Seamless epoxy factory floor", caption: "Self-levelling epoxy finish" },
+  1336→      { alt: "Coved skirting detail", caption: "Hygienic coved skirting" },
+  1337→    ],
+  1338→    location: "Sharjah Industrial Area 12",
+  1339→    area: "4,500 m²",
+  1340→  },
+  1341→];
+  1342→
+  1343→// ---------------------------------------------------------------------------
+  1344→// CASE STUDIES (linked to projects)
+  1345→// ---------------------------------------------------------------------------
+  1346→
+  1347→export const caseStudies: CaseStudy[] = [
+  1348→  {
+  1349→    slug: "abu-dhabi-highway-night-marking",
+  1350→    title: "How We Marked 42 km of Highway Without Closing a Lane",
+  1351→    projectSlug: "abu-dhabi-highway-thermoplastic",
+  1352→    summary:
+  1353→      "A night-shift thermoplastic operation that re-marked the E22 highway to R3 reflectivity with zero daytime disruption.",
+  1354→    outcomes: [
+  1355→      "Zero daytime lane closures across 42 km",
+  1356→      "R3 night-reflectivity achieved on 100% of lines",
+  1357→      "168 km of thermoplastic applied in 28 night shifts",
+  1358→      "Project delivered 4 days ahead of schedule",
+  1359→    ],
+  1360→    testimonial: {
+  1361→      quote:
+  1362→        "Gulf Seismic's night-shift operation was flawless — they kept the highway open and delivered reflectivity that exceeded our spec.",
+  1363→      author: "Project Director",
+  1364→      role: "Transport Authority",
+  1365→    },
+  1366→  },
+  1367→  {
+  1368→    slug: "dubai-mall-capacity-optimisation",
+  1369→    title: "Adding 240 Parking Bays Without Expanding the Deck",
+  1370→    projectSlug: "dubai-mall-parking-marking",
+  1371→    summary:
+  1372→      "A layout re-optimisation that increased parking capacity by 7.5% across a 3,200-bay mega-mall deck — with zero mall downtime.",
+  1373→    outcomes: [
+  1374→      "+240 bays added (+7.5% capacity)",
+  1375→      "Zero mall closure days",
+  1376→      "6 levels marked in 12 days",
+  1377→      "Colour-coded EV, family, disabled and VIP zones",
+  1378→    ],
+  1379→    testimonial: {
+  1380→      quote:
+  1381→        "We gained 240 bays of revenue-generating parking without pouring a single metre of concrete. Outstanding engineering.",
+  1382→      author: "Facilities Director",
+  1383→      role: "Retail Group",
+  1384→    },
+  1385→  },
+  1386→  {
+  1387→    slug: "riyadh-warehouse-zero-downtime",
+  1388→    title: "Zero-Downtime Warehouse Marking for a 24/7 3PL Hub",
+  1389→    projectSlug: "riyadh-warehouse-epoxy-marking",
+  1390→    summary:
+  1391→      "Polyurea line systems and phased zoning kept a 22,000 m² logistics hub fully operational during a complete floor-marking overhaul.",
+  1392→    outcomes: [
+  1393→      "22,000 m² marked with <2 hr downtime per zone",
+  1394→      "HSE-compliant colour coding across 12 zones",
+  1395→      "Polyurea system rated for 5+ year service life",
+  1396→      "Zero safety incidents during application",
+  1397→    ],
+  1398→    testimonial: {
+  1399→      quote:
+  1400→        "Our operation never stopped. That is the definition of a professional marking contractor.",
+  1401→      author: "Operations Manager",
+  1402→      role: "3PL Provider",
+  1403→    },
+  1404→  },
+  1405→];
+  1406→
+  1407→// ---------------------------------------------------------------------------
+  1408→// BLOG / RESOURCES
+  1409→// ---------------------------------------------------------------------------
+  1410→
+  1411→export const blogPosts: BlogPost[] = [
+  1412→  {
+  1413→    slug: "thermoplastic-vs-cold-paint-road-marking",
+  1414→    title: "Thermoplastic vs Cold Paint Road Marking: Which Lasts Longer in the Gulf?",
+  1415→    excerpt:
+  1416→      "A technical comparison of thermoplastic and cold paint systems under UAE and Saudi climate conditions — durability, cost and reflectivity.",
+  1417→    category: "Technical Guide",
+  1418→    readTime: "6 min read",
+  1419→    date: "2024-11-12",
+  1420→    author: "Gulf Seismic Technical Team",
+  1421→  },
+  1422→  {
+  1423→    slug: "parking-lot-capacity-optimisation",
+  1424→    title: "How Bay Layout Optimisation Can Add 15% More Parking",
+  1425→    excerpt:
+  1426→      "The geometry, aisle width and angle strategies that maximise parking capacity without expanding the deck.",
+  1427→    category: "Commercial",
+  1428→    readTime: "5 min read",
+  1429→    date: "2024-11-05",
+  1430→    author: "Gulf Seismic Design Team",
+  1431→  },
+  1432→  {
+  1433→    slug: "warehouse-5s-floor-marking-guide",
+  1434→    title: "The Complete 5S Warehouse Floor Marking Guide",
+  1435→    excerpt:
+  1436→      "Colour codes, lane widths and zone strategies for an HSE-compliant and 5S-optimised warehouse floor.",
+  1437→    category: "Industrial Guide",
+  1438→    readTime: "8 min read",
+  1439→    date: "2024-10-28",
+  1440→    author: "Gulf Seismic Industrial Team",
+  1441→  },
+  1442→  {
+  1443→    slug: "icao-annex-14-airport-marking-explained",
+  1444→    title: "ICAO Annex 14 Airport Marking: A Contractor's Field Guide",
+  1445→    excerpt:
+  1446→      "Runway, taxiway and apron marking requirements explained — dimensions, colours, reflectivity and materials.",
+  1447→    category: "Aviation",
+  1448→    readTime: "7 min read",
+  1449→    date: "2024-10-20",
+  1450→    author: "Gulf Seismic Aviation Team",
+  1451→  },
+  1452→  {
+  1453→    slug: "epoxy-vs-polyurea-industrial-floors",
+  1454→    title: "Epoxy vs Polyurea: Choosing the Right Industrial Floor System",
+  1455→    excerpt:
+  1456→      "Chemical resistance, cure time and service life compared — how to specify the right system for your facility.",
+  1457→    category: "Technical Guide",
+  1458→    readTime: "6 min read",
+  1459→    date: "2024-10-12",
+  1460→    author: "Gulf Seismic Technical Team",
+  1461→  },
+  1462→  {
+  1463→    slug: "saudi-vision-2030-road-marking-opportunities",
+  1464→    title: "Saudi Vision 2030: Road Marking Opportunities Across the Kingdom",
+  1465→    excerpt:
+  1466→      "How megaprojects, NEOM and urban expansion are driving demand for marking contractors in Saudi Arabia.",
+  1467→    category: "Market Insight",
+  1468→    readTime: "5 min read",
+  1469→    date: "2024-10-04",
+  1470→    author: "Gulf Seismic Strategy Team",
+  1471→  },
+  1472→];
+  1473→
+  1474→// ---------------------------------------------------------------------------
+  1475→// COMPANY / ORG DATA
+  1476→// ---------------------------------------------------------------------------
+  1477→
+  1478→export const company = {
+  1479→  name: "Gulf Seismic",
+  1480→  legalName: "Gulf Seismic Contracting LLC",
+  1481→  tagline: "The Gulf's Authority in Road & Industrial Marking",
+  1482→  description:
+  1483→    "Gulf Seismic is the UAE and Saudi Arabia authority for thermoplastic road marking, parking lot marking, warehouse marking, airport marking, industrial marking, safety signage and epoxy flooring — delivering municipal-spec quality across 16 cities.",
+  1484→  url: "https://gulfseismic.com",
+  1485→  cmsUrl: "https://cms.gulfseismic.com",
+  1486→  frontendUrl: "https://gulf-seismic.vercel.app",
+  1487→  graphqlEndpoint: "https://cms.gulfseismic.com/graphql",
+  1488→  email: "info@gulfseismic.com",
+  1489→  phone: "+971 4 000 0000",
+  1490→  whatsapp: "97150000000",
+  1491→  founded: 2015,
+  1492→  headquarters: {
+  1493→    country: "uae",
+  1494→    city: "Dubai",
+  1495→    address: "Dubai, United Arab Emirates",
+  1496→  },
+  1497→  stats: [
+  1498→    { label: "Cities served", value: "16" },
+  1499→    { label: "km of lines applied", value: "2,400+" },
+  1500→    { label: "Projects delivered", value: "850+" },
+  1501→    { label: "Years in the Gulf", value: "10" },
+  1502→  ],
+  1503→  certifications: ["ISO 9001", "ICAO Annex 14", "OSHA / HSE", "RTA & MOMRA Compliant"],
+  1504→  social: {
+  1505→    linkedin: "https://www.linkedin.com/company/gulf-seismic",
+  1506→    instagram: "https://www.instagram.com/gulfseismic",
+  1507→  },
+  1508→};
+  1509→
+  1510→// ---------------------------------------------------------------------------
+  1511→// LOOKUP HELPERS
+  1512→// ---------------------------------------------------------------------------
+  1513→
+  1514→export const getCountry = (slug: CountrySlug) => countries.find((c) => c.slug === slug);
+  1515→export const getCity = (slug: string) => cities.find((c) => c.slug === slug);
+  1516→export const getService = (slug: string) => services.find((s) => s.slug === slug);
+  1517→export const getIndustry = (slug: string) => industries.find((i) => i.slug === slug);
+  1518→export const getProject = (slug: string) => projects.find((p) => p.slug === slug);
+  1519→export const getCaseStudy = (slug: string) => caseStudies.find((cs) => cs.slug === slug);
+  1520→
+  1521→export const getCitiesByCountry = (country: CountrySlug) =>
+  1522→  cities.filter((c) => c.country === country);
+  1523→
+  1524→export const getServicesByIndustry = (industrySlug: string) =>
+  1525→  services.filter((s) => s.industriesServed.includes(industrySlug));
+  1526→
+  1527→export const getProjectsByCity = (citySlug: string) =>
+  1528→  projects.filter((p) => p.city === citySlug);
+  1529→
+  1530→export const getProjectsByService = (serviceSlug: string) =>
+  1531→  projects.filter((p) => p.service === serviceSlug);
+  1532→
+  1533→export const getProjectsByCountry = (country: CountrySlug) =>
+  1534→  projects.filter((p) => p.country === country);
+  1535→
+  1536→/**
+  1537→ * Generate the full list of 128 commercial service-city page combinations.
+  1538→ * Each entry produces a unique programmatic SEO URL:
+  1539→ *   /uae/abu-dhabi/road-marking  ... /saudi-arabia/madinah/epoxy-flooring
+  1540→ */
+  1541→export interface ServiceCityPage {
+  1542→  country: CountrySlug;
+  1543→  countryName: string;
+  1544→  citySlug: string;
+  1545→  cityName: string;
+  1546→  serviceSlug: string;
+  1547→  serviceName: string;
+  1548→  path: string;
+  1549→}
+  1550→
+  1551→export const getServiceCityPages = (): ServiceCityPage[] => {
+  1552→  const pages: ServiceCityPage[] = [];
+  1553→  for (const country of countries) {
+  1554→    for (const city of getCitiesByCountry(country.slug)) {
+  1555→      for (const service of services) {
+  1556→        pages.push({
+  1557→          country: country.slug,
+  1558→          countryName: country.name,
+  1559→          citySlug: city.slug,
+  1560→          cityName: city.name,
+  1561→          serviceSlug: service.slug,
+  1562→          serviceName: service.name,
+  1563→          path: `/${country.slug}/${city.slug}/${service.slug}`,
+  1564→        });
+  1565→      }
+  1566→    }
+  1567→  }
+  1568→  return pages;
+  1569→};
+  1570→
+  1571→export const TOTAL_PROGRAMMATIC_PAGES = getServiceCityPages().length; // 128
+  1572→

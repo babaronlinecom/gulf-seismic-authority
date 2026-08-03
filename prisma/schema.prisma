@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Lead Generation — captures every funnel entry (RFQ, WhatsApp, Call, Contact,
+// Tender) with full attribution for source, campaign, city and service.
+// ---------------------------------------------------------------------------
+
+model Lead {
+  id        String   @id @default(cuid())
+  name      String
+  company   String?
+  email     String
+  phone     String
+  country   String   // uae | saudi-arabia
+  city      String?
+  service   String?
+  message   String
+
+  // Attribution & funnel
+  source    String   @default("website-rfq") // website-rfq | whatsapp | call | contact | tender
+  campaign  String?
+  funnel    String   @default("rfq")
+  leadScore Int      @default(50) // 0-100, computed from data completeness + intent
+
+  // Workflow
+  status    String   @default("new") // new | contacted | qualified | quoted | won | lost
+  notes     String?
+
+  // Metadata
+  userAgent String?
+  referrer  String?
+  pagePath  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([source])
+  @@index([country])
+  @@index([city])
+  @@index([service])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// ---------------------------------------------------------------------------
+// Newsletter / resource downloads (optional future use)
+// ---------------------------------------------------------------------------
+
+model Subscription {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  source    String   @default("website")
+  createdAt DateTime @default(now())
+}
