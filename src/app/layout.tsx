@@ -2,9 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
-import { Header } from "@/components/gulf/header";
-import { Footer } from "@/components/gulf/footer";
-import { WhatsAppFab } from "@/components/gulf/whatsapp-fab";
 import { JsonLd } from "@/components/gulf/json-ld";
 import { organizationSchema, websiteSchema } from "@/lib/seo";
 import { company } from "@/lib/gulf-data";
@@ -44,9 +41,7 @@ export const metadata: Metadata = {
   authors: [{ name: company.legalName }],
   creator: company.legalName,
   publisher: company.legalName,
-  icons: {
-    icon: "/logo.svg",
-  },
+  icons: { icon: "/logo.svg" },
   openGraph: {
     title: "Gulf Seismic | Road & Industrial Marking Authority",
     description: company.description,
@@ -60,9 +55,7 @@ export const metadata: Metadata = {
     title: "Gulf Seismic | Road & Industrial Marking Authority",
     description: company.description,
   },
-  alternates: {
-    canonical: company.url,
-  },
+  alternates: { canonical: company.url },
   robots: {
     index: true,
     follow: true,
@@ -86,12 +79,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
         <JsonLd data={[organizationSchema(), websiteSchema()]} />
-        <div className="flex min-h-screen flex-col">
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </div>
-        <WhatsAppFab />
+        {children}
         <Toaster />
       </body>
     </html>
