@@ -46,7 +46,7 @@ import {
   upsertPost,
   setRelationship,
   type WpPostPayload,
-} from "../src/lib/wp-rest-client";
+} from "./lib/wp-rest-client";
 
 const args = process.argv.slice(2);
 const DRY_RUN = args.includes("--dry-run");
