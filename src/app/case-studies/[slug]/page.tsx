@@ -7,11 +7,12 @@ import { LeadCtaSection } from "@/components/gulf/lead-cta-section";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { JsonLd } from "@/components/gulf/json-ld";
-import { caseStudies, getProject, cities, countries } from "@/lib/gulf-data";
+import { getProject, cities, countries, type Project } from "@/lib/gulf-data";
+import { allCaseStudies, allProjects } from "@/lib/gulf-content-merged";
 import { buildMetadata, breadcrumbSchema, articleSchema } from "@/lib/seo";
 
 export async function generateStaticParams() {
-  return caseStudies.map((cs) => ({ slug: cs.slug }));
+  return allCaseStudies.map((cs) => ({ slug: cs.slug }));
 }
 
 export async function generateMetadata({
@@ -20,7 +21,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const cs = caseStudies.find((x) => x.slug === slug);
+  const cs = allCaseStudies.find((x) => x.slug === slug);
   if (!cs) return buildMetadata({ title: "Not Found", description: "", noIndex: true });
   return buildMetadata({
     title: `${cs.title} | Case Study`,
@@ -35,11 +36,11 @@ export default async function CaseStudyPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const cs = caseStudies.find((x) => x.slug === slug);
+  const cs = allCaseStudies.find((x) => x.slug === slug);
   if (!cs) notFound();
 
   const path = `/case-studies/${cs.slug}`;
-  const project = getProject(cs.projectSlug);
+  const project = getProject(cs.projectSlug) ?? allProjects.find((p) => p.slug === cs.projectSlug);
   const city = project ? cities.find((c) => c.slug === project.city) : null;
   const country = project ? countries.find((c) => c.slug === project.country) : null;
 

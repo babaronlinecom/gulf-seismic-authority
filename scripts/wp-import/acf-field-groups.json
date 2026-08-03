@@ -1,0 +1,128 @@
+[
+  {
+    "key": "group_gulf_country",
+    "title": "Country Fields",
+    "fields": [
+      { "key": "field_country_code", "label": "Country Code", "name": "country_code", "type": "text", "instructions": "ISO 3166-1 alpha-2 (e.g. AE, SA)", "required": true },
+      { "key": "field_country_short_name", "label": "Short Name", "name": "short_name", "type": "text", "instructions": "e.g. UAE, Saudi Arabia", "required": true },
+      { "key": "field_country_flag", "label": "Flag Emoji", "name": "flag", "type": "text", "instructions": "e.g. 🇦🇪", "required": false },
+      { "key": "field_country_dial_code", "label": "Dial Code", "name": "dial_code", "type": "text", "instructions": "e.g. +971", "required": false },
+      { "key": "field_country_phone", "label": "Phone", "name": "phone", "type": "text", "required": false },
+      { "key": "field_country_whatsapp", "label": "WhatsApp Number", "name": "whatsapp", "type": "text", "instructions": "Digits only, with country code", "required": false },
+      { "key": "field_country_hero_heading", "label": "Hero Heading", "name": "hero_heading", "type": "text", "required": true },
+      { "key": "field_country_hero_description", "label": "Hero Description", "name": "hero_description", "type": "textarea", "required": true },
+      { "key": "field_country_seo_title", "label": "SEO Title", "name": "seo_title", "type": "text", "instructions": "55-60 chars", "required": true },
+      { "key": "field_country_seo_description", "label": "SEO Description", "name": "seo_description", "type": "textarea", "instructions": "150-160 chars", "required": true }
+    ],
+    "location": [{ "param": "post_type", "operator": "==", "value": "countries" }],
+    "position": "normal",
+    "style": "default"
+  },
+  {
+    "key": "group_gulf_city",
+    "title": "City Fields",
+    "fields": [
+      { "key": "field_city_country", "label": "Country", "name": "country", "type": "post_object", "post_type": ["countries"], "taxonomy": [], "multiple": false, "required": true, "return_format": "id" },
+      { "key": "field_city_region", "label": "Region / Province", "name": "region", "type": "text", "required": false },
+      { "key": "field_city_latitude", "label": "Latitude", "name": "latitude", "type": "number", "step": "0.0001", "required": true },
+      { "key": "field_city_longitude", "label": "Longitude", "name": "longitude", "type": "number", "step": "0.0001", "required": true },
+      { "key": "field_city_population", "label": "Population Label", "name": "population", "type": "text", "instructions": "e.g. 3.6M+", "required": false },
+      { "key": "field_city_highlights", "label": "Highlights", "name": "highlights", "type": "repeater", "layout": "row", "sub_fields": [{ "key": "field_city_highlight", "label": "Highlight", "name": "highlight", "type": "text" }] },
+      { "key": "field_city_hero_heading", "label": "Hero Heading", "name": "hero_heading", "type": "text", "required": true },
+      { "key": "field_city_hero_description", "label": "Hero Description", "name": "hero_description", "type": "textarea", "required": true },
+      { "key": "field_city_seo_title", "label": "SEO Title", "name": "seo_title", "type": "text", "required": true },
+      { "key": "field_city_seo_description", "label": "SEO Description", "name": "seo_description", "type": "textarea", "required": true },
+      { "key": "field_city_map_url", "label": "Google Maps Embed URL", "name": "map_url", "type": "url", "required": false },
+      { "key": "field_city_gbp_url", "label": "Google Business Profile URL", "name": "gbp_url", "type": "url", "required": false },
+      { "key": "field_city_nap_name", "label": "NAP — Name", "name": "nap_name", "type": "text", "instructions": "Local citation name", "required": false },
+      { "key": "field_city_nap_address", "label": "NAP — Address", "name": "nap_address", "type": "textarea", "required": false }
+    ],
+    "location": [{ "param": "post_type", "operator": "==", "value": "cities" }],
+    "position": "normal"
+  },
+  {
+    "key": "group_gulf_service",
+    "title": "Service Fields",
+    "fields": [
+      { "key": "field_service_tagline", "label": "Tagline", "name": "tagline", "type": "text", "required": true },
+      { "key": "field_service_short_description", "label": "Short Description", "name": "short_description", "type": "textarea", "required": true },
+      { "key": "field_service_long_description", "label": "Long Description", "name": "long_description", "type": "wysiwyg", "required": true },
+      { "key": "field_service_icon", "label": "Icon Name", "name": "icon", "type": "text", "instructions": "Lucide icon name (e.g. Road, Flame, Warehouse)", "required": false },
+      { "key": "field_service_benefits", "label": "Benefits", "name": "benefits", "type": "repeater", "layout": "row", "sub_fields": [{ "key": "field_service_benefit", "label": "Benefit", "name": "benefit", "type": "text" }] },
+      { "key": "field_service_materials", "label": "Materials", "name": "materials", "type": "repeater", "layout": "row", "sub_fields": [{ "key": "field_service_material", "label": "Material", "name": "material", "type": "text" }] },
+      { "key": "field_service_equipment", "label": "Equipment", "name": "equipment", "type": "repeater", "layout": "row", "sub_fields": [{ "key": "field_service_equip", "label": "Equipment", "name": "equipment", "type": "text" }] },
+      { "key": "field_service_industries", "label": "Industries Served", "name": "industries_served", "type": "relationship", "post_type": ["industries"], "multiple": true, "return_format": "id" },
+      { "key": "field_service_process", "label": "Process Steps", "name": "process", "type": "repeater", "layout": "row", "sub_fields": [{ "key": "field_service_process_step", "label": "Step #", "name": "step", "type": "number" }, { "key": "field_service_process_title", "label": "Title", "name": "title", "type": "text" }, { "key": "field_service_process_desc", "label": "Description", "name": "description", "type": "textarea" }] },
+      { "key": "field_service_specs", "label": "Specs", "name": "specs", "type": "repeater", "layout": "row", "sub_fields": [{ "key": "field_service_spec_label", "label": "Label", "name": "label", "type": "text" }, { "key": "field_service_spec_value", "label": "Value", "name": "value", "type": "text" }] },
+      { "key": "field_service_hero_heading", "label": "Hero Heading", "name": "hero_heading", "type": "text", "required": true },
+      { "key": "field_service_hero_description", "label": "Hero Description", "name": "hero_description", "type": "textarea", "required": true },
+      { "key": "field_service_seo_title", "label": "SEO Title", "name": "seo_title", "type": "text", "required": true },
+      { "key": "field_service_seo_description", "label": "SEO Description", "name": "seo_description", "type": "textarea", "required": true }
+    ],
+    "location": [{ "param": "post_type", "operator": "==", "value": "services" }],
+    "position": "normal"
+  },
+  {
+    "key": "group_gulf_industry",
+    "title": "Industry Fields",
+    "fields": [
+      { "key": "field_industry_description", "label": "Description", "name": "description", "type": "textarea", "required": true },
+      { "key": "field_industry_icon", "label": "Icon Name", "name": "icon", "type": "text", "required": false },
+      { "key": "field_industry_challenges", "label": "Challenges", "name": "challenges", "type": "repeater", "layout": "row", "sub_fields": [{ "key": "field_industry_challenge", "label": "Challenge", "name": "challenge", "type": "text" }] },
+      { "key": "field_industry_solutions", "label": "Solutions", "name": "solutions", "type": "repeater", "layout": "row", "sub_fields": [{ "key": "field_industry_solution", "label": "Solution", "name": "solution", "type": "text" }] },
+      { "key": "field_industry_services", "label": "Related Services", "name": "services", "type": "relationship", "post_type": ["services"], "multiple": true, "return_format": "id" }
+    ],
+    "location": [{ "param": "post_type", "operator": "==", "value": "industries" }],
+    "position": "normal"
+  },
+  {
+    "key": "group_gulf_project",
+    "title": "Project Fields",
+    "fields": [
+      { "key": "field_project_country", "label": "Country", "name": "country", "type": "post_object", "post_type": ["countries"], "multiple": false, "required": true, "return_format": "id" },
+      { "key": "field_project_city", "label": "City", "name": "city", "type": "post_object", "post_type": ["cities"], "multiple": false, "required": true, "return_format": "id" },
+      { "key": "field_project_service", "label": "Service", "name": "service", "type": "post_object", "post_type": ["services"], "multiple": false, "required": true, "return_format": "id" },
+      { "key": "field_project_industry", "label": "Industry", "name": "industry", "type": "post_object", "post_type": ["industries"], "multiple": false, "required": true, "return_format": "id" },
+      { "key": "field_project_client", "label": "Client", "name": "client", "type": "text", "instructions": "Use Confidential [Type] — never real names", "required": true },
+      { "key": "field_project_year", "label": "Year", "name": "year", "type": "number", "required": true },
+      { "key": "field_project_duration", "label": "Duration", "name": "duration", "type": "text", "required": true },
+      { "key": "field_project_location", "label": "Location", "name": "location", "type": "text", "required": true },
+      { "key": "field_project_area", "label": "Area / Scope", "name": "area", "type": "text", "required": true },
+      { "key": "field_project_challenge", "label": "Challenge", "name": "challenge", "type": "textarea", "required": true },
+      { "key": "field_project_solution", "label": "Solution", "name": "solution", "type": "textarea", "required": true },
+      { "key": "field_project_execution", "label": "Execution", "name": "execution", "type": "textarea", "required": true },
+      { "key": "field_project_materials", "label": "Materials", "name": "materials", "type": "repeater", "layout": "row", "sub_fields": [{ "key": "field_project_material", "label": "Material", "name": "material", "type": "text" }] },
+      { "key": "field_project_equipment", "label": "Equipment", "name": "equipment", "type": "repeater", "layout": "row", "sub_fields": [{ "key": "field_project_equip", "label": "Equipment", "name": "equipment", "type": "text" }] },
+      { "key": "field_project_results", "label": "Results", "name": "results", "type": "repeater", "layout": "row", "sub_fields": [{ "key": "field_project_result_label", "label": "Label", "name": "label", "type": "text" }, { "key": "field_project_result_value", "label": "Value", "name": "value", "type": "text" }] },
+      { "key": "field_project_gallery", "label": "Gallery", "name": "gallery", "type": "gallery", "return_format": "array", "preview_size": "medium" }
+    ],
+    "location": [{ "param": "post_type", "operator": "==", "value": "projects" }],
+    "position": "normal"
+  },
+  {
+    "key": "group_gulf_case_study",
+    "title": "Case Study Fields",
+    "fields": [
+      { "key": "field_cs_project", "label": "Linked Project", "name": "project", "type": "post_object", "post_type": ["projects"], "multiple": false, "required": true, "return_format": "id" },
+      { "key": "field_cs_summary", "label": "Summary", "name": "summary", "type": "textarea", "required": true },
+      { "key": "field_cs_outcomes", "label": "Outcomes", "name": "outcomes", "type": "repeater", "layout": "row", "sub_fields": [{ "key": "field_cs_outcome", "label": "Outcome", "name": "outcome", "type": "text" }] },
+      { "key": "field_cs_testimonial_quote", "label": "Testimonial Quote", "name": "testimonial_quote", "type": "textarea", "required": false },
+      { "key": "field_cs_testimonial_author", "label": "Testimonial Author", "name": "testimonial_author", "type": "text", "required": false },
+      { "key": "field_cs_testimonial_role", "label": "Testimonial Role", "name": "testimonial_role", "type": "text", "required": false }
+    ],
+    "location": [{ "param": "post_type", "operator": "==", "value": "case_studies" }],
+    "position": "normal"
+  },
+  {
+    "key": "group_gulf_faq",
+    "title": "FAQ Fields",
+    "fields": [
+      { "key": "field_faq_answer", "label": "Answer", "name": "answer", "type": "textarea", "required": true },
+      { "key": "field_faq_service", "label": "Service", "name": "service", "type": "post_object", "post_type": ["services"], "multiple": false, "required": false, "return_format": "id" },
+      { "key": "field_faq_city", "label": "City (optional)", "name": "city", "type": "post_object", "post_type": ["cities"], "multiple": false, "required": false, "return_format": "id" },
+      { "key": "field_faq_cluster", "label": "FAQ Cluster", "name": "cluster", "type": "select", "choices": { "general": "General", "cost": "Cost & Pricing", "comparison": "Comparison", "process": "Process & Timeline", "compliance": "Compliance & Standards", "local": "Local / City-Specific" }, "required": true }
+    ],
+    "location": [{ "param": "post_type", "operator": "==", "value": "faqs" }],
+    "position": "normal"
+  }
+]

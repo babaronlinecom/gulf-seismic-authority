@@ -16,6 +16,7 @@ import {
   getProjectsByCity,
   type CountrySlug,
 } from "@/lib/gulf-data";
+import { allProjects } from "@/lib/gulf-content-merged";
 import { DynamicIcon } from "@/components/gulf/dynamic-icon";
 import {
   generateCityServiceIntro,
@@ -30,6 +31,8 @@ import {
   localBusinessSchema,
   faqSchema,
 } from "@/lib/seo";
+import { aeoBundle } from "@/lib/aeo-geo";
+import { LocalBusinessSignals } from "@/components/gulf/local-business-signals";
 
 const COUNTRIES: CountrySlug[] = ["uae", "saudi-arabia"];
 
@@ -79,7 +82,10 @@ export default async function CityServicePage({
   const intro = generateCityServiceIntro(ct, s, c);
   const body = generateCityServiceBody(ct, s, c);
   const faqs = generateCityServiceFaqs(ct, s, c);
-  const cityProjects = getProjectsByCity(ct.slug).filter((p) => p.service === s.slug);
+  // Use merged projects (50 total) — city projects for this service
+  const cityProjects = allProjects
+    .filter((p) => p.city === ct.slug && p.service === s.slug)
+    .slice(0, 4);
 
   // Related services in this city (internal linking)
   const relatedServices = services.filter((x) => x.slug !== s.slug).slice(0, 4);
@@ -89,14 +95,13 @@ export default async function CityServicePage({
       <JsonLd
         data={[
           organizationSchema(),
-          localBusinessSchema(c, ct, path),
           breadcrumbSchema([
             { name: "Home", url: "/" },
             { name: c.name, url: `/${c.slug}` },
             { name: ct.name, url: `/${c.slug}/${ct.slug}` },
             { name: s.name, url: path },
           ]),
-          faqSchema(faqs),
+          ...aeoBundle({ country: c, city: ct, service: s, faqs, path }),
         ]}
       />
       <PageHero
@@ -287,6 +292,9 @@ export default async function CityServicePage({
                   {ct.longitude}°E.
                 </p>
               </Card>
+
+              {/* Local business signals — NAP, map embed, GBP */}
+              <LocalBusinessSignals country={c} city={ct} />
 
               {/* CTA */}
               <div className="rounded-xl bg-primary p-5 text-primary-foreground">

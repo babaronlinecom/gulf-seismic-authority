@@ -5,11 +5,12 @@ import { ArrowRight, MapPin, Calendar, Ruler } from "lucide-react";
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { projects, services, cities } from "@/lib/gulf-data";
+import { services, cities } from "@/lib/gulf-data";
+import { allProjects } from "@/lib/gulf-content-merged";
 import { getIcon } from "@/lib/icons";
 
 export function ProjectsShowcase() {
-  const featured = projects.slice(0, 6);
+  const featured = allProjects.slice(0, 6);
   return (
     <section className="bg-secondary py-16 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

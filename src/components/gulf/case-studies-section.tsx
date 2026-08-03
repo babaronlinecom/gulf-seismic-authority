@@ -4,7 +4,8 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Quote, ArrowRight } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { caseStudies, getProject } from "@/lib/gulf-data";
+import { getProject } from "@/lib/gulf-data";
+import { allCaseStudies, allProjects } from "@/lib/gulf-content-merged";
 
 export function CaseStudiesSection() {
   return (
@@ -29,8 +30,8 @@ export function CaseStudiesSection() {
         </div>
 
         <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
-          {caseStudies.map((cs, i) => {
-            const project = getProject(cs.projectSlug);
+          {allCaseStudies.slice(0, 3).map((cs, i) => {
+            const project = getProject(cs.projectSlug) ?? allProjects.find((p) => p.slug === cs.projectSlug);
             return (
               <motion.div
                 key={cs.slug}

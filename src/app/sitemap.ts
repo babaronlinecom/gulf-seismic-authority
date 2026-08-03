@@ -5,11 +5,10 @@ import {
   cities,
   services,
   industries,
-  projects,
-  caseStudies,
   blogPosts,
   getServiceCityPages,
 } from "@/lib/gulf-data";
+import { allProjects, allCaseStudies } from "@/lib/gulf-content-merged";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = company.url;
@@ -22,6 +21,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/projects`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: `${base}/industries`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${base}/case-studies`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${base}/glossary`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
   ];
 
   // Country hubs
@@ -65,7 +65,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   // Project pages
-  const projectPages: MetadataRoute.Sitemap = projects.map((p) => ({
+  const projectPages: MetadataRoute.Sitemap = allProjects.map((p) => ({
     url: `${base}/projects/${p.slug}`,
     lastModified: now,
     changeFrequency: "monthly",
@@ -73,7 +73,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   // Case study pages
-  const caseStudyPages: MetadataRoute.Sitemap = caseStudies.map((cs) => ({
+  const caseStudyPages: MetadataRoute.Sitemap = allCaseStudies.map((cs) => ({
     url: `${base}/case-studies/${cs.slug}`,
     lastModified: now,
     changeFrequency: "monthly",

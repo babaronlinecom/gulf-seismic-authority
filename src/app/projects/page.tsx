@@ -6,13 +6,15 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { JsonLd } from "@/components/gulf/json-ld";
 import {
-  projects,
   services,
   cities,
   countries,
 } from "@/lib/gulf-data";
+import { allProjects } from "@/lib/gulf-content-merged";
+import { getProjectsList } from "@/lib/wordpress";
 import { DynamicIcon } from "@/components/gulf/dynamic-icon";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
+import { projectCollectionSchema } from "@/lib/aeo-geo";
 
 export const metadata: Metadata = buildMetadata({
   title: "Marking Projects Portfolio | Road, Parking, Warehouse, Airport Case Studies",
@@ -21,14 +23,22 @@ export const metadata: Metadata = buildMetadata({
   path: "/projects",
 });
 
-export default function ProjectsPage() {
+export default async function ProjectsPage() {
+  // Live CMS primary, merged seed fallback (50 projects)
+  const projects = await getProjectsList();
+  const projectCount = projects.length || allProjects.length;
+  const displayProjects = projects.length ? projects : allProjects;
+
   return (
     <>
       <JsonLd
-        data={breadcrumbSchema([
-          { name: "Home", url: "/" },
-          { name: "Projects", url: "/projects" },
-        ])}
+        data={[
+          breadcrumbSchema([
+            { name: "Home", url: "/" },
+            { name: "Projects", url: "/projects" },
+          ]),
+          projectCollectionSchema(projectCount),
+        ]}
       />
       <PageHero
         eyebrow="Project Authority"
@@ -43,7 +53,7 @@ export default function ProjectsPage() {
           <div className="mb-8 flex flex-wrap items-center gap-2">
             <span className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground">
               <Filter className="h-4 w-4" />
-              All projects ({projects.length})
+              All projects ({displayProjects.length})
             </span>
             <div className="ml-auto flex flex-wrap gap-2">
               {countries.map((c) => (
@@ -59,7 +69,7 @@ export default function ProjectsPage() {
           </div>
 
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {projects.map((project) => {
+            {displayProjects.map((project) => {
               const service = services.find((s) => s.slug === project.service);
               const city = cities.find((c) => c.slug === project.city);
               return (

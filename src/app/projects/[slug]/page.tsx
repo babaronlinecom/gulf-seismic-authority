@@ -9,18 +9,17 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { JsonLd } from "@/components/gulf/json-ld";
 import {
-  projects,
   services,
   industries,
   cities,
   countries,
-  caseStudies,
-  getIcon,
 } from "@/lib/gulf-data";
+import { allProjects, allCaseStudies } from "@/lib/gulf-content-merged";
+import { getProjectsList, getCaseStudiesList } from "@/lib/wordpress";
 import { buildMetadata, breadcrumbSchema, projectSchema } from "@/lib/seo";
 
 export async function generateStaticParams() {
-  return projects.map((p) => ({ slug: p.slug }));
+  return allProjects.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -29,7 +28,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const p = projects.find((x) => x.slug === slug);
+  const p = allProjects.find((x) => x.slug === slug);
   if (!p) return buildMetadata({ title: "Not Found", description: "", noIndex: true });
   return buildMetadata({
     title: `${p.title} | Case Study`,
@@ -44,7 +43,7 @@ export default async function ProjectPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const p = projects.find((x) => x.slug === slug);
+  const p = allProjects.find((x) => x.slug === slug);
   if (!p) notFound();
 
   const path = `/projects/${p.slug}`;
@@ -52,7 +51,7 @@ export default async function ProjectPage({
   const industry = industries.find((i) => i.slug === p.industry);
   const city = cities.find((c) => c.slug === p.city);
   const country = countries.find((c) => c.slug === p.country);
-  const caseStudy = caseStudies.find((cs) => cs.projectSlug === p.slug);
+  const caseStudy = allCaseStudies.find((cs) => cs.projectSlug === p.slug);
 
   return (
     <>
@@ -243,7 +242,7 @@ export default async function ProjectPage({
           <div className="mt-16">
             <h2 className="text-2xl font-bold">Related projects</h2>
             <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {projects
+              {allProjects
                 .filter((x) => x.slug !== p.slug && (x.service === p.service || x.city === p.city))
                 .slice(0, 3)
                 .map((rp) => (

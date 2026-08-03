@@ -4,7 +4,8 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/gulf/page-hero";
 import { Card } from "@/components/ui/card";
 import { JsonLd } from "@/components/gulf/json-ld";
-import { caseStudies, getProject } from "@/lib/gulf-data";
+import { getProject } from "@/lib/gulf-data";
+import { allCaseStudies } from "@/lib/gulf-content-merged";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
@@ -32,7 +33,7 @@ export default function CaseStudiesPage() {
       <section className="py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {caseStudies.map((cs) => {
+            {allCaseStudies.map((cs) => {
               const project = getProject(cs.projectSlug);
               return (
                 <Link key={cs.slug} href={`/case-studies/${cs.slug}`} className="group block h-full">
