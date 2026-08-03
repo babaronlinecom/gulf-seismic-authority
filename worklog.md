@@ -243,3 +243,25 @@ Stage Summary:
 - Vercel: ❌ Remote build fails (local build succeeds). User must check Vercel dashboard → Build Logs to see the actual error (not exposed via API).
 - WordPress: ❌ Blocked by StackProtect. User must whitelist IP in WP Admin → Settings → StackProtect.
 - Security: Git remote URL cleaned (no token). .env not tracked. Credentials should be ROTATED by user (shared in chat).
+
+---
+Task ID: RESTORE (Undo + Separate Deploy)
+Agent: Orchestrator (Z.ai Code)
+Task: Restore original gulf-seismic repo to pre-merge state and deploy Phase 2 to a new separate repository.
+
+Work Log:
+- Restored original repo (github.com/babaronlinecom/gulf-seismic): force-reset main to ca0d6d9 (the "feat: migrate DB to Neon PostgreSQL" commit — the last commit before my work). Deleted phase-2-authority-platform branch. PR #1 auto-closed. Original repo now has ONLY its 3 original commits and 1 branch (main).
+- Created new separate repo: github.com/babaronlinecom/gulf-seismic-authority
+- Pushed Phase 2 code (202 files) to new repo main branch.
+- Created new Vercel project: gulf-seismic-authority (prj_e8Sv8Kd23dD3LZITbYgrzsMrayJq), linked to new GitHub repo.
+- Set environment variables: DATABASE_URL (dummy for build), NODE_OPTIONS=--max-old-space-size=4096.
+- Vercel remote build failed multiple times ("Command 'bun run build' exited with 1" / "npx next build exited with 1"). Root cause could not be determined via API (Vercel doesn't expose build logs for failed deployments).
+- Solution: deployed via `vercel deploy --prebuilt --prod --archive=tgz` — builds locally (where it succeeds) and uploads the prebuilt output as a single tarball (avoids both the remote build failure and the CLI upload rate limit).
+- Deployment SUCCEEDED: https://gulf-seismic-authority.vercel.app (Ready in 41s).
+
+Stage Summary:
+- Original repo: RESTORED to ca0d6d9 (3 commits, 1 branch, 122 files — exactly as it was before my work)
+- New repo: github.com/babaronlinecom/gulf-seismic-authority (202 files, Phase 2 authority platform)
+- Live deployment: https://gulf-seismic-authority.vercel.app — all routes 200, 241 sitemap URLs, 50 projects verified in browser
+- Vercel project: gulf-seismic-authority (separate from original gulf-seismic project)
+- Token cleaned from git remote URL (security)
