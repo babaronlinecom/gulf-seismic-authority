@@ -8,6 +8,16 @@ import { getPublishedPosts, getPostCategories } from "@/lib/cms";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { JsonLd } from "@/components/gulf/json-ld";
 
+// Map blog post slugs to their generated featured images
+const blogImageMap: Record<string, string> = {
+  "thermoplastic-vs-cold-paint-road-marking": "/images/blog/thermoplastic-vs-cold-paint.jpg",
+  "parking-lot-capacity-optimisation": "/images/blog/parking-optimisation.jpg",
+  "warehouse-5s-floor-marking-guide": "/images/blog/warehouse-5s-guide.jpg",
+  "icao-annex-14-airport-marking-explained": "/images/blog/icao-annex-14.jpg",
+  "epoxy-vs-polyurea-industrial-floors": "/images/blog/epoxy-vs-polyurea.jpg",
+  "saudi-vision-2030-road-marking-opportunities": "/images/blog/saudi-vision-2030.jpg",
+};
+
 export const metadata: Metadata = buildMetadata({
   title: "Blog | Road & Industrial Marking Insights — Gulf Seismic",
   description:
@@ -79,12 +89,13 @@ export default async function BlogPage({
               {posts.map((post) => (
                 <Link key={post.id} href={`/blog/${post.slug}`} className="group block h-full">
                   <Card className="flex h-full flex-col overflow-hidden transition-all hover:border-amber-brand hover:shadow-lg">
-                    {post.featuredImage ? (
+                    {(post.featuredImage || blogImageMap[post.slug]) ? (
                       <div className="aspect-video overflow-hidden bg-muted">
                         <img
-                          src={post.featuredImage}
-                          alt={post.title}
+                          src={post.featuredImage || blogImageMap[post.slug]}
+                          alt={`${post.title} — Gulf Seismic blog`}
                           className="h-full w-full object-cover transition-transform group-hover:scale-105"
+                          loading="lazy"
                         />
                       </div>
                     ) : (

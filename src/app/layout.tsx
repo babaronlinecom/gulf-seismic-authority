@@ -49,11 +49,13 @@ export const metadata: Metadata = {
     siteName: company.name,
     type: "website",
     locale: "en_US",
+    images: [{ url: "/images/og/default-og.jpg", width: 1344, height: 768, alt: "Gulf Seismic — Road & Industrial Marking Authority across UAE and Saudi Arabia" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Gulf Seismic | Road & Industrial Marking Authority",
     description: company.description,
+    images: ["/images/og/default-og.jpg"],
   },
   alternates: { canonical: company.url },
   robots: {

@@ -10,6 +10,16 @@ import { buildMetadata, breadcrumbSchema, articleSchema } from "@/lib/seo";
 import { JsonLd } from "@/components/gulf/json-ld";
 import ReactMarkdown from "react-markdown";
 
+// Map blog post slugs to their generated featured images
+const blogImageMap: Record<string, string> = {
+  "thermoplastic-vs-cold-paint-road-marking": "/images/blog/thermoplastic-vs-cold-paint.jpg",
+  "parking-lot-capacity-optimisation": "/images/blog/parking-optimisation.jpg",
+  "warehouse-5s-floor-marking-guide": "/images/blog/warehouse-5s-guide.jpg",
+  "icao-annex-14-airport-marking-explained": "/images/blog/icao-annex-14.jpg",
+  "epoxy-vs-polyurea-industrial-floors": "/images/blog/epoxy-vs-polyurea.jpg",
+  "saudi-vision-2030-road-marking-opportunities": "/images/blog/saudi-vision-2030.jpg",
+};
+
 export const revalidate = 300;
 
 export async function generateMetadata({
@@ -91,11 +101,11 @@ export default async function BlogPostPage({
           </div>
 
           {/* Featured image */}
-          {post.featuredImage && (
+          {(post.featuredImage || blogImageMap[post.slug]) && (
             <div className="mb-8 overflow-hidden rounded-xl">
               <img
-                src={post.featuredImage}
-                alt={post.title}
+                src={post.featuredImage || blogImageMap[post.slug]}
+                alt={`${post.title} — Gulf Seismic blog`}
                 className="aspect-video w-full object-cover"
               />
             </div>

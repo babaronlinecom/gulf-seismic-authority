@@ -36,17 +36,29 @@ export function ServicesGrid() {
                 transition={{ duration: 0.4, delay: i * 0.05 }}
               >
                 <Link href={`/services/${service.slug}`} className="group block h-full">
-                  <Card className="relative h-full overflow-hidden p-5 transition-all hover:border-amber-brand hover:shadow-lg">
-                    <div className="absolute right-0 top-0 h-16 w-16 translate-x-8 -translate-y-8 rounded-full bg-amber-brand/10 transition-transform group-hover:translate-x-6 group-hover:-translate-y-6" />
-                    <div className="relative">
-                      <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                        <Icon className="h-5 w-5" />
+                  <Card className="relative h-full overflow-hidden p-0 transition-all hover:border-amber-brand hover:shadow-lg">
+                    {/* Service image */}
+                    <div className="relative h-40 overflow-hidden bg-muted">
+                      <img
+                        src={`/images/services/${service.slug}.jpg`}
+                        alt={`${service.name} — ${service.tagline}`}
+                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent" />
+                      <div className="absolute bottom-2 left-3 flex items-center gap-2">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-brand text-amber-foreground">
+                          <Icon className="h-4 w-4" />
+                        </div>
+                        <h3 className="font-semibold text-sm text-primary-foreground">{service.name}</h3>
                       </div>
-                      <h3 className="mt-4 font-semibold leading-tight">{service.name}</h3>
-                      <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
+                    </div>
+                    {/* Content */}
+                    <div className="p-4">
+                      <p className="line-clamp-2 text-sm text-muted-foreground">
                         {service.shortDescription}
                       </p>
-                      <div className="mt-4 flex items-center gap-1 text-sm font-medium text-amber-brand">
+                      <div className="mt-3 flex items-center gap-1 text-sm font-medium text-amber-brand">
                         Learn more
                         <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
                       </div>

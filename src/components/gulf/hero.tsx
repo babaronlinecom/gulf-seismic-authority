@@ -9,6 +9,15 @@ import type { HeroData, SiteSettings } from "@/lib/cms";
 export function Hero({ hero, settings }: { hero: HeroData; settings: SiteSettings }) {
   return (
     <section className="relative overflow-hidden bg-primary text-primary-foreground">
+      {/* Hero background image */}
+      <div className="absolute inset-0">
+        <img
+          src="/images/hero/home-hero.jpg"
+          alt="Gulf Seismic road marking professionals applying thermoplastic lines on a UAE highway at golden hour"
+          className="h-full w-full object-cover opacity-30"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/90 to-primary/40" />
+      </div>
       {/* Road stripe accent */}
       <div className="absolute inset-x-0 top-0 h-1.5 road-stripe-h opacity-80" />
       <div className="absolute inset-x-0 bottom-0 h-1.5 road-stripe-h opacity-40" />

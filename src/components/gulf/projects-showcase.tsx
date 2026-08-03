@@ -9,6 +9,16 @@ import { services, cities } from "@/lib/gulf-data";
 import { allProjects } from "@/lib/gulf-content-merged";
 import { getIcon } from "@/lib/icons";
 
+// Map project slugs to their generated images
+const projectImageMap: Record<string, string> = {
+  "abu-dhabi-highway-thermoplastic": "/images/projects/highway-thermoplastic.jpg",
+  "dubai-mall-parking-marking": "/images/projects/mall-parking.jpg",
+  "riyadh-warehouse-epoxy-marking": "/images/projects/warehouse-epoxy.jpg",
+  "jubail-petrochemical-hazard-marking": "/images/projects/petrochemical-marking.jpg",
+  "dammam-airport-taxiway-marking": "/images/projects/airport-taxiway.jpg",
+  "sharjah-factory-epoxy-floor": "/images/projects/factory-epoxy-floor.jpg",
+};
+
 export function ProjectsShowcase() {
   const featured = allProjects.slice(0, 6);
   return (
@@ -51,9 +61,15 @@ export function ProjectsShowcase() {
               >
                 <Link href={`/projects/${project.slug}`} className="group block h-full">
                   <Card className="flex h-full flex-col overflow-hidden transition-all hover:border-amber-brand hover:shadow-lg">
-                    {/* Visual header */}
-                    <div className="relative h-32 overflow-hidden bg-primary">
-                      <div className="absolute inset-0 road-stripe-h opacity-30" />
+                    {/* Visual header with project image */}
+                    <div className="relative h-36 overflow-hidden bg-primary">
+                      <img
+                        src={projectImageMap[project.slug] || "/images/projects/highway-thermoplastic.jpg"}
+                        alt={`${project.title} — ${services.find(s => s.slug === project.service)?.name || "marking"} project in ${cities.find(c => c.slug === project.city)?.name || ""}`}
+                        className="h-full w-full object-cover opacity-70 transition-transform duration-300 group-hover:scale-105"
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-primary/90 to-transparent" />
                       <div className="absolute inset-0 flex items-center justify-between p-4">
                         <div className="flex items-center gap-2">
                           {ServiceIcon && (
