@@ -2,7 +2,8 @@
 // Production: PostgreSQL (Neon). Local dev: also PostgreSQL via DATABASE_URL env.
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-3.0.x", "debian-openssl-3.0.x"]
 }
 
 datasource db {
