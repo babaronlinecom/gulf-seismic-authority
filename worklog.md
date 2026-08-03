@@ -265,3 +265,29 @@ Stage Summary:
 - Live deployment: https://gulf-seismic-authority.vercel.app — all routes 200, 241 sitemap URLs, 50 projects verified in browser
 - Vercel project: gulf-seismic-authority (separate from original gulf-seismic project)
 - Token cleaned from git remote URL (security)
+
+---
+Task ID: ADMIN (Backend to Manage Website)
+Agent: Orchestrator (Z.ai Code)
+Task: Build a complete admin backend for managing the Gulf Seismic website — authentication, dashboard, lead management, and content CRUD.
+
+Work Log:
+- Database: Added AdminUser, ProjectRecord, CaseStudyRecord models to Prisma schema. Switched provider to sqlite for local dev (PostgreSQL for production).
+- Auth: NextAuth.js v4 with CredentialsProvider (bcrypt password hashing). JWT sessions (8hr). Login page at /admin/login. Session helpers: getAdminSession(), requireAdmin(), requireRole().
+- Layout: Restructured with Next.js route groups — (site)/ for public pages (Header/Footer/WhatsAppFab), admin/ for admin panel (sidebar). Root layout is now minimal (html/body only).
+- Dashboard (/admin): Stats cards (total leads, new leads, won deals, projects), lead source pie chart (Recharts), recent lead activity bar chart, recent leads list with score/status badges.
+- Leads (/admin/leads): Searchable/filterable table (by status, source, text search). Lead detail drawer (Sheet) with full contact info, message, WhatsApp/email quick reply buttons, status update (new→contacted→qualified→quoted→won/lost). CSV export endpoint.
+- Projects (/admin/projects): Full CRUD with dialog form — title, slug, country/city/service/industry selects, client, year, duration, location, area, challenge/solution/execution textareas, materials/equipment/results (line-separated → JSON arrays). View/edit/delete buttons per project.
+- Case Studies (/admin/case-studies): Full CRUD with dialog form — title, slug, summary, outcomes, testimonial.
+- Settings (/admin/settings): Change own password, create admin users (admin role only), system info.
+- API routes: /api/admin/stats, /api/admin/leads/[id] (PATCH/DELETE), /api/admin/leads/export (CSV), /api/admin/projects (GET/POST), /api/admin/projects/[id] (GET/PUT/DELETE), /api/admin/case-studies (GET/POST), /api/admin/case-studies/[id] (PUT/DELETE), /api/admin/settings/password, /api/admin/settings/users.
+- Seed script: scripts/seed-admin.ts — creates admin@gulfseismic.com / gulf-seismic-2026 (admin role).
+- Fixed NextAuth route path: moved from /api/admin/auth/[...nextauth] to /api/auth/[...nextauth] (NextAuth default).
+- Added NEXTAUTH_SECRET and NEXTAUTH_URL to .env (local) and Vercel env vars (production).
+
+Stage Summary:
+- Lint: 0 errors. All routes working locally and on production.
+- Production: https://gulf-seismic-authority.vercel.app/admin/login — admin panel is LIVE.
+- Admin credentials: admin@gulfseismic.com / gulf-seismic-2026 (CHANGE PASSWORD after first login via Settings).
+- Agent Browser verified: login flow works, dashboard shows stats + recent leads, leads page has search/filter/export, projects page has CRUD dialog.
+- Deployed via prebuilt tgz archive (Ready in 47s).
