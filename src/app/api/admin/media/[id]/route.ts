@@ -10,9 +10,23 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
   const item = await db.mediaItem.update({
     where: { id },
     data: {
-      ...(b.alt !== undefined && { alt: b.alt || null }),
       ...(b.filename !== undefined && { filename: b.filename }),
+      ...(b.title !== undefined && { title: b.title || null }),
+      ...(b.alt !== undefined && { alt: b.alt || null }),
       ...(b.folder !== undefined && { folder: b.folder }),
+      // SEO fields
+      ...(b.seoTitle !== undefined && { seoTitle: b.seoTitle || null }),
+      ...(b.seoAlt !== undefined && { seoAlt: b.seoAlt || null }),
+      ...(b.seoCaption !== undefined && { seoCaption: b.seoCaption || null }),
+      // Social/OG fields
+      ...(b.ogTitle !== undefined && { ogTitle: b.ogTitle || null }),
+      ...(b.ogDescription !== undefined && { ogDescription: b.ogDescription || null }),
+      ...(b.socialCaption !== undefined && { socialCaption: b.socialCaption || null }),
+      ...(b.socialHashtags !== undefined && { socialHashtags: b.socialHashtags || null }),
+      // Display options
+      ...(b.lazyLoad !== undefined && { lazyLoad: !!b.lazyLoad }),
+      ...(b.gradientOverlay !== undefined && { gradientOverlay: b.gradientOverlay || null }),
+      ...(b.resizeNote !== undefined && { resizeNote: b.resizeNote || null }),
     },
   });
   return NextResponse.json({ ok: true, item });

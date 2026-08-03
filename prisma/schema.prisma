@@ -297,16 +297,31 @@ model Section {
 // ---------------------------------------------------------------------------
 
 model MediaItem {
-  id        String   @id @default(cuid())
-  filename  String
-  url       String   // data URL or external URL
-  alt       String?
-  mimeType  String
-  size      Int      @default(0) // bytes
-  width     Int?
-  height    Int?
-  folder    String   @default("general")
-  createdAt DateTime @default(now())
+  id              String   @id @default(cuid())
+  filename        String
+  title           String?  // display title
+  url             String   // data URL or /images/... path
+  alt             String?  // descriptive alt text (accessibility + basic SEO)
+  mimeType        String
+  size            Int      @default(0) // bytes
+  width           Int?
+  height          Int?
+  folder          String   @default("general")
+  // SEO optimization
+  seoTitle        String?  // SEO-focused title
+  seoAlt          String?  // SEO-focused alt text (keyword-rich)
+  seoCaption      String?  // caption for image search SEO
+  // Social / OG metadata
+  ogTitle         String?  // Open Graph title
+  ogDescription   String?  // Open Graph description
+  socialCaption   String?  // social media caption
+  socialHashtags  String?  // comma-separated hashtags
+  // Display options
+  lazyLoad        Boolean  @default(true)
+  gradientOverlay String?  // none | light | dark | primary
+  resizeNote      String?  // resize notes (e.g., "thumbnail 400px, OG 1200x630")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   @@index([folder])
   @@index([createdAt])
