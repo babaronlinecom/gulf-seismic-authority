@@ -425,3 +425,37 @@ Stage Summary:
 - Recommendation engine LIVE — analyzes DB state, generates prioritized suggestions with impact scores.
 - Content gap analysis LIVE — detects specific missing FAQs ("How much does road marking cost in UAE?") with suggested answers.
 - Admin sees recommendations first (default tab), can filter by pillar, and click through to fix each issue.
+
+---
+Task ID: IMAGES (AI-Generated Website Images — SEO & Social Optimized)
+Agent: Orchestrator (Z.ai Code)
+Task: Generate professional images for the entire website and make them SEO and social media friendly.
+
+Work Log:
+- Generated 22 professional images using z-ai-web-dev-sdk AI image generation:
+  - 1 hero background (highway road marking at golden hour, 1344x768)
+  - 8 service images (one per service, 1024x1024, with descriptive prompts)
+  - 6 project images (highway, mall, warehouse, petrochemical, airport, factory)
+  - 6 blog featured images (thermoplastic comparison, parking optimisation, 5S guide, ICAO Annex 14, epoxy vs polyurea, Saudi Vision 2030)
+  - 1 OG social share image (1344x768)
+- Wired images into all components:
+  - Hero: background image with gradient overlay for text readability
+  - ServicesGrid: image cards with service name overlay (replaced icon-only cards)
+  - ProjectsShowcase: project photos with gradient overlay (replaced road-stripe pattern)
+  - Projects page (/projects): 50 project images with service image fallback
+  - Blog listing: featured image per post (replaced placeholder icon)
+  - Blog detail: featured image header
+  - Root layout: OG image + Twitter card with proper dimensions and alt text
+- All images have descriptive alt text for SEO and accessibility (e.g., "Gulf Seismic road marking professionals applying thermoplastic lines on a UAE highway at golden hour")
+- All images are lazy-loaded (loading="lazy") for performance
+- OG metadata includes: og:image, og:image:width, og:image:height, og:image:alt, twitter:card, twitter:image
+- Total image weight: 5.5MB across 34 images
+
+Stage Summary:
+- Production deployed: https://gulf-seismic-authority.vercel.app
+- Homepage: 15 images rendering (verified in browser)
+- Projects page: 50 images rendering
+- Blog: 6 featured images rendering
+- Social sharing: OG image with full meta tags (verified in HTML source)
+- All images return HTTP 200 on production
+- Website is no longer "empty with images" — every section has professional, relevant visuals
