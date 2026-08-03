@@ -1,6 +1,6 @@
 {
-  "name": "nextjs_tailwind_shadcn_ts",
-  "version": "0.2.0",
+  "name": "gulf-seismic",
+  "version": "0.3.0",
   "private": true,
   "scripts": {
     "dev": "next dev -p 3000 2>&1 | tee dev.log",
@@ -11,7 +11,11 @@
     "db:push": "prisma db push",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
-    "db:reset": "prisma migrate reset"
+    "db:reset": "prisma migrate reset",
+    "cms:verify": "bun run scripts/migrate-to-wordpress.ts --verify",
+    "cms:migrate": "bun run scripts/migrate-to-wordpress.ts",
+    "cms:migrate:dry": "bun run scripts/migrate-to-wordpress.ts --dry-run",
+    "cms:migrate:projects": "bun run scripts/migrate-to-wordpress.ts --only=projects"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

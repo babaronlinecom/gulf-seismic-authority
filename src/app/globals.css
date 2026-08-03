@@ -37,10 +37,6 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --color-brand: var(--brand);
-  --color-brand-foreground: var(--brand-foreground);
-  --color-brand-2: var(--brand-2);
-  --color-brand-2-foreground: var(--brand-2-foreground);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -48,89 +44,91 @@
 }
 
 /*
-  Gulf Seismic brand palette
-  - Asphalt charcoal + thermoplastic amber + desert terracotta + crisp road-line white
-  - Deliberately NO indigo/blue
-*/
+ * Gulf Seismic brand palette
+ * - Asphalt: deep warm charcoal (primary)
+ * - Thermoplastic amber: signature road-marking yellow (accent)
+ * - Paint white / line white
+ */
 :root {
   --radius: 0.625rem;
-  /* Surfaces */
-  --background: oklch(0.985 0.004 85);            /* warm off-white */
-  --foreground: oklch(0.21 0.008 60);             /* asphalt charcoal */
+  --background: oklch(0.99 0.002 95);
+  --foreground: oklch(0.21 0.01 60);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.21 0.008 60);
+  --card-foreground: oklch(0.21 0.01 60);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.21 0.008 60);
-  /* Primary = deep asphalt */
-  --primary: oklch(0.225 0.01 60);
-  --primary-foreground: oklch(0.985 0.004 85);
-  /* Secondary = warm sand */
-  --secondary: oklch(0.95 0.012 75);
-  --secondary-foreground: oklch(0.225 0.01 60);
-  --muted: oklch(0.955 0.01 75);
-  --muted-foreground: oklch(0.48 0.012 65);
-  /* Brand = thermoplastic amber */
-  --accent: oklch(0.93 0.04 80);
-  --accent-foreground: oklch(0.225 0.01 60);
-  --brand: oklch(0.76 0.16 70);                   /* thermoplastic amber/yellow */
-  --brand-foreground: oklch(0.21 0.008 60);
-  --brand-2: oklch(0.6 0.13 42);                  /* desert terracotta */
-  --brand-2-foreground: oklch(0.985 0.004 85);
+  --popover-foreground: oklch(0.21 0.01 60);
+  --primary: oklch(0.22 0.012 60);
+  --primary-foreground: oklch(0.99 0.002 95);
+  --secondary: oklch(0.96 0.004 95);
+  --secondary-foreground: oklch(0.22 0.012 60);
+  --muted: oklch(0.96 0.004 95);
+  --muted-foreground: oklch(0.52 0.01 60);
+  --accent: oklch(0.95 0.02 85);
+  --accent-foreground: oklch(0.22 0.012 60);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.9 0.012 75);
-  --input: oklch(0.9 0.012 75);
-  --ring: var(--brand);
-  --chart-1: oklch(0.76 0.16 70);
-  --chart-2: oklch(0.6 0.13 42);
-  --chart-3: oklch(0.55 0.05 70);
-  --chart-4: oklch(0.7 0.08 85);
-  --chart-5: oklch(0.4 0.02 60);
-  --sidebar: oklch(0.985 0.004 85);
-  --sidebar-foreground: oklch(0.21 0.008 60);
-  --sidebar-primary: oklch(0.225 0.01 60);
-  --sidebar-primary-foreground: oklch(0.985 0.004 85);
-  --sidebar-accent: oklch(0.95 0.012 75);
-  --sidebar-accent-foreground: oklch(0.225 0.01 60);
-  --sidebar-border: oklch(0.9 0.012 75);
-  --sidebar-ring: var(--brand);
+  --border: oklch(0.9 0.005 85);
+  --input: oklch(0.9 0.005 85);
+  --ring: oklch(0.75 0.16 75);
+
+  /* Gulf Seismic signature — thermoplastic amber */
+  --amber: oklch(0.82 0.17 76);
+  --amber-foreground: oklch(0.22 0.012 60);
+  --amber-dark: oklch(0.72 0.18 70);
+
+  --chart-1: oklch(0.82 0.17 76);
+  --chart-2: oklch(0.7 0.15 50);
+  --chart-3: oklch(0.55 0.12 200);
+  --chart-4: oklch(0.65 0.2 35);
+  --chart-5: oklch(0.5 0.05 60);
+
+  --sidebar: oklch(0.985 0.002 95);
+  --sidebar-foreground: oklch(0.21 0.01 60);
+  --sidebar-primary: oklch(0.22 0.012 60);
+  --sidebar-primary-foreground: oklch(0.985 0.002 95);
+  --sidebar-accent: oklch(0.95 0.02 85);
+  --sidebar-accent-foreground: oklch(0.22 0.012 60);
+  --sidebar-border: oklch(0.9 0.005 85);
+  --sidebar-ring: oklch(0.75 0.16 75);
 }
 
 .dark {
-  --background: oklch(0.165 0.006 60);            /* near-black asphalt */
-  --foreground: oklch(0.965 0.005 85);
-  --card: oklch(0.215 0.008 60);
-  --card-foreground: oklch(0.965 0.005 85);
-  --popover: oklch(0.215 0.008 60);
-  --popover-foreground: oklch(0.965 0.005 85);
-  --primary: oklch(0.965 0.005 85);
-  --primary-foreground: oklch(0.165 0.006 60);
+  --background: oklch(0.17 0.008 60);
+  --foreground: oklch(0.96 0.004 95);
+  --card: oklch(0.21 0.01 60);
+  --card-foreground: oklch(0.96 0.004 95);
+  --popover: oklch(0.21 0.01 60);
+  --popover-foreground: oklch(0.96 0.004 95);
+  --primary: oklch(0.96 0.004 95);
+  --primary-foreground: oklch(0.22 0.012 60);
   --secondary: oklch(0.27 0.01 60);
-  --secondary-foreground: oklch(0.965 0.005 85);
+  --secondary-foreground: oklch(0.96 0.004 95);
   --muted: oklch(0.27 0.01 60);
-  --muted-foreground: oklch(0.72 0.012 70);
-  --accent: oklch(0.3 0.02 60);
-  --accent-foreground: oklch(0.965 0.005 85);
-  --brand: oklch(0.8 0.16 72);
-  --brand-foreground: oklch(0.165 0.006 60);
-  --brand-2: oklch(0.66 0.14 44);
-  --brand-2-foreground: oklch(0.985 0.004 85);
+  --muted-foreground: oklch(0.68 0.01 60);
+  --accent: oklch(0.3 0.02 70);
+  --accent-foreground: oklch(0.96 0.004 95);
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: var(--brand);
-  --chart-1: oklch(0.8 0.16 72);
-  --chart-2: oklch(0.66 0.14 44);
-  --chart-3: oklch(0.7 0.08 85);
-  --chart-4: oklch(0.6 0.1 60);
-  --chart-5: oklch(0.5 0.04 70);
-  --sidebar: oklch(0.215 0.008 60);
-  --sidebar-foreground: oklch(0.965 0.005 85);
-  --sidebar-primary: oklch(0.8 0.16 72);
-  --sidebar-primary-foreground: oklch(0.165 0.006 60);
-  --sidebar-accent: oklch(0.3 0.02 60);
-  --sidebar-accent-foreground: oklch(0.965 0.005 85);
+  --ring: oklch(0.82 0.17 76);
+
+  --amber: oklch(0.84 0.17 76);
+  --amber-foreground: oklch(0.17 0.008 60);
+  --amber-dark: oklch(0.74 0.18 70);
+
+  --chart-1: oklch(0.84 0.17 76);
+  --chart-2: oklch(0.75 0.15 50);
+  --chart-3: oklch(0.6 0.12 200);
+  --chart-4: oklch(0.7 0.2 35);
+  --chart-5: oklch(0.55 0.05 60);
+
+  --sidebar: oklch(0.21 0.01 60);
+  --sidebar-foreground: oklch(0.96 0.004 95);
+  --sidebar-primary: oklch(0.84 0.17 76);
+  --sidebar-primary-foreground: oklch(0.17 0.008 60);
+  --sidebar-accent: oklch(0.3 0.02 70);
+  --sidebar-accent-foreground: oklch(0.96 0.004 95);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: var(--brand);
+  --sidebar-ring: oklch(0.82 0.17 76);
 }
 
 @layer base {
@@ -139,107 +137,61 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: "ss01", "cv01";
-  }
-  html {
-    scroll-behavior: smooth;
-  }
-  [dir="rtl"] {
-    text-align: right;
+    font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
 
-/* ---------- Brand utilities ---------- */
-
-/* Road-line divider: dashed amber/white lane marking motif */
-.road-line {
-  background-image: repeating-linear-gradient(
-    90deg,
-    var(--brand) 0,
-    var(--brand) 28px,
-    transparent 28px,
-    transparent 52px
-  );
-  height: 4px;
-  width: 100%;
-  border-radius: 9999px;
-}
-[dir="rtl"] .road-line {
-  background-image: repeating-linear-gradient(
-    -90deg,
-    var(--brand) 0,
-    var(--brand) 28px,
-    transparent 28px,
-    transparent 52px
-  );
-}
-
-/* Solid brand gradient surface */
-.brand-surface {
-  background: linear-gradient(
-    135deg,
-    oklch(0.225 0.01 60) 0%,
-    oklch(0.27 0.02 55) 100%
-  );
-  color: oklch(0.965 0.005 85);
-}
-.dark .brand-surface {
-  background: linear-gradient(
-    135deg,
-    oklch(0.26 0.02 60) 0%,
-    oklch(0.2 0.01 55) 100%
-  );
+/* Utility classes for Gulf Seismic brand */
+@layer utilities {
+  .bg-amber-brand {
+    background-color: var(--amber);
+  }
+  .text-amber-brand {
+    color: var(--amber);
+  }
+  .bg-asphalt {
+    background-color: var(--primary);
+  }
+  .road-stripe {
+    background-image: repeating-linear-gradient(
+      45deg,
+      var(--amber) 0,
+      var(--amber) 14px,
+      transparent 14px,
+      transparent 28px
+    );
+  }
+  .road-stripe-h {
+    background-image: repeating-linear-gradient(
+      90deg,
+      var(--amber) 0,
+      var(--amber) 24px,
+      transparent 24px,
+      transparent 48px
+    );
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
 }
 
-/* Amber glow used on hero CTAs */
-.amber-glow {
-  box-shadow: 0 0 0 1px oklch(0.76 0.16 70 / 0.35),
-    0 8px 30px -8px oklch(0.76 0.16 70 / 0.5);
-}
-
-/* Subtle grid / topo background for hero sections */
-.topo-bg {
-  background-image:
-    radial-gradient(circle at 20% 20%, oklch(0.76 0.16 70 / 0.10) 0, transparent 40%),
-    radial-gradient(circle at 80% 0%, oklch(0.6 0.13 42 / 0.10) 0, transparent 35%);
-}
-
-/* Custom scrollbar */
-.scroll-area {
+/* Custom scrollbar for long lists */
+.scroll-area-gulf {
   scrollbar-width: thin;
-  scrollbar-color: var(--brand) transparent;
+  scrollbar-color: var(--amber) transparent;
 }
-.scroll-area::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+.scroll-area-gulf::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
-.scroll-area::-webkit-scrollbar-track {
+.scroll-area-gulf::-webkit-scrollbar-thumb {
+  background-color: var(--amber);
+  border-radius: 3px;
+}
+.scroll-area-gulf::-webkit-scrollbar-track {
   background: transparent;
 }
-.scroll-area::-webkit-scrollbar-thumb {
-  background: color-mix(in oklch, var(--brand) 60%, transparent);
-  border-radius: 9999px;
-}
-.scroll-area::-webkit-scrollbar-thumb:hover {
-  background: var(--brand);
-}
 
-/* Animations */
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-.animate-marquee {
-  animation: marquee 32s linear infinite;
-}
-[dir="rtl"] .animate-marquee {
-  animation-direction: reverse;
-}
-
-@keyframes lineDraw {
-  from { width: 0; }
-  to { width: 100%; }
-}
-.animate-line-draw {
-  animation: lineDraw 1.2s ease-out forwards;
+html {
+  scroll-behavior: smooth;
 }

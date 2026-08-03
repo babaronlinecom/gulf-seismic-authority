@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "@/components/ui/sonner";
-import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/toaster";
+import { Header } from "@/components/gulf/header";
+import { Footer } from "@/components/gulf/footer";
+import { WhatsAppFab } from "@/components/gulf/whatsapp-fab";
+import { JsonLd } from "@/components/gulf/json-ld";
+import { organizationSchema, websiteSchema } from "@/lib/seo";
+import { company } from "@/lib/gulf-data";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,63 +20,78 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://gulfseismic.com"),
+  metadataBase: new URL(company.url),
   title: {
-    default:
-      "Gulf Seismic — Road Marking & Infrastructure Contractor | Saudi Arabia & GCC",
+    default: "Gulf Seismic | Road & Industrial Marking Authority — UAE & Saudi Arabia",
     template: "%s | Gulf Seismic",
   },
-  description:
-    "Gulf Seismic General Contracting LLC — specialist road marking, thermoplastic marking, airport & runway marking, road studs, industrial safety marking and line removal for Saudi Arabia and the GCC. Request a technical RFQ.",
+  description: company.description,
   keywords: [
-    "Saudi road marking contractor",
-    "thermoplastic road marking Saudi Arabia",
-    "airport runway marking",
-    "parking marking",
-    "road studs raised pavement markers",
-    "industrial safety marking",
-    "line removal and remarking",
-    "GCC infrastructure contractor",
+    "road marking UAE",
+    "thermoplastic road marking",
+    "parking lot marking",
+    "warehouse marking",
+    "airport marking",
+    "industrial marking",
+    "safety signage",
+    "epoxy flooring",
+    "road marking Saudi Arabia",
+    "Riyadh road marking",
+    "Jeddah road marking",
+    "Dubai road marking",
+    "Abu Dhabi road marking",
   ],
-  authors: [{ name: "Gulf Seismic General Contracting LLC" }],
-  alternates: {
-    canonical: "https://gulfseismic.com/",
-    languages: {
-      "en-SA": "https://gulfseismic.com/en/",
-      "ar-SA": "https://gulfseismic.com/ar/",
-    },
+  authors: [{ name: company.legalName }],
+  creator: company.legalName,
+  publisher: company.legalName,
+  icons: {
+    icon: "/logo.svg",
   },
   openGraph: {
-    title: "Gulf Seismic — Road Marking & Infrastructure Contractor | Saudi Arabia & GCC",
-    description:
-      "Specialist road marking, thermoplastic, airport/runway, road studs, industrial safety marking and line removal. Saudi/GCC market-access ready. Request a technical RFQ.",
-    url: "https://gulfseismic.com/",
-    siteName: "Gulf Seismic",
+    title: "Gulf Seismic | Road & Industrial Marking Authority",
+    description: company.description,
+    url: company.url,
+    siteName: company.name,
     type: "website",
-    images: ["/images/og-cover.jpg"],
+    locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Gulf Seismic — Road Marking & Infrastructure Contractor",
-    description:
-      "Specialist road marking for Saudi Arabia & the GCC. Request a technical RFQ.",
-    images: ["/images/og-cover.jpg"],
+    title: "Gulf Seismic | Road & Industrial Marking Authority",
+    description: company.description,
   },
-  icons: {
-    icon: "/images/logo-mark.png",
+  alternates: {
+    canonical: company.url,
   },
-  robots: { index: true, follow: true },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
-        <ThemeProvider>{children}</ThemeProvider>
+        <JsonLd data={[organizationSchema(), websiteSchema()]} />
+        <div className="flex min-h-screen flex-col">
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </div>
+        <WhatsAppFab />
         <Toaster />
       </body>
     </html>
