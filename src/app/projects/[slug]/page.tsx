@@ -15,7 +15,6 @@ import {
   countries,
 } from "@/lib/gulf-data";
 import { allProjects, allCaseStudies } from "@/lib/gulf-content-merged";
-import { getProjectsList, getCaseStudiesList } from "@/lib/wordpress";
 import { buildMetadata, breadcrumbSchema, projectSchema } from "@/lib/seo";
 
 export async function generateStaticParams() {

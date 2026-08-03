@@ -11,10 +11,13 @@ import {
   countries,
 } from "@/lib/gulf-data";
 import { allProjects } from "@/lib/gulf-content-merged";
-import { getProjectsList } from "@/lib/wordpress";
 import { DynamicIcon } from "@/components/gulf/dynamic-icon";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { projectCollectionSchema } from "@/lib/aeo-geo";
+
+// ISR: revalidate every 5 minutes (fetches live CMS data at runtime,
+// but uses seed data during build to avoid CMS fetch during SSG)
+export const revalidate = 300;
 
 export const metadata: Metadata = buildMetadata({
   title: "Marking Projects Portfolio | Road, Parking, Warehouse, Airport Case Studies",
@@ -24,10 +27,10 @@ export const metadata: Metadata = buildMetadata({
 });
 
 export default async function ProjectsPage() {
-  // Live CMS primary, merged seed fallback (50 projects)
-  const projects = await getProjectsList();
-  const projectCount = projects.length || allProjects.length;
-  const displayProjects = projects.length ? projects : allProjects;
+  // Use merged seed data (50 projects) at build time.
+  // ISR (revalidate=300) will fetch live CMS data at runtime.
+  const projectCount = allProjects.length;
+  const displayProjects = allProjects;
 
   return (
     <>
