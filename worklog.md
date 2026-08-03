@@ -316,3 +316,37 @@ Stage Summary:
 - Admin credentials: admin@gulfseismic.com / gulf-seismic-2026
 - All admin features (dashboard, leads, projects, case studies, settings) now use the live Neon database.
 - Prisma binaryTargets fix ensures the client works on both local dev (debian) and Vercel (rhel).
+
+---
+Task ID: CMS (Full Content Management System)
+Agent: Orchestrator (Z.ai Code)
+Task: Build a complete CMS where admin can manage the entire website — pages, posts, header/footer menus, hero sections, site settings.
+
+Work Log:
+- Added 6 Prisma models: Page, Post, MenuItem, HeroSection, SiteSetting, Section. Pushed to Neon.
+- Seeded default CMS content: 12 site settings, 7 header menu items, 8 footer menu items, 1 homepage hero (with stats).
+- Built CMS data access layer (src/lib/cms.ts): getSiteSettings(), getMenuItems(), getHero(), getPage(), getPublishedPosts(), getPublishedPost(), getPostCategories() — all with seed fallbacks for build safety.
+- Built 10 admin API routes: /api/admin/pages (GET/POST + [id] PUT/DELETE), /posts (same), /menu-items (same), /hero (same), /settings/site (GET/PUT).
+- Built 5 admin UI pages with full CRUD:
+  - /admin/pages: Pages manager (title, slug, hero, content, SEO, show in header/footer)
+  - /admin/posts: Blog posts manager (title, slug, excerpt, content, category, author, featured image, SEO)
+  - /admin/menus: Menu builder (add/edit/delete header + footer items, inline edit, orderable)
+  - /admin/hero: Hero sections manager (page, eyebrow, heading, subheading, CTAs, stats)
+  - /admin/site-settings: Site settings (brand, contact, social, footer about, certifications)
+- Updated admin sidebar with 10 nav items (Dashboard, Leads, Pages, Blog Posts, Menus, Hero Sections, Projects, Case Studies, Site Settings, Account).
+- Wired public site to read from DB:
+  - Header: renders menu items from DB (Services/UAE/Saudi dropdowns preserved)
+  - Footer: renders menu items + site settings (contact, social, certifications, about text)
+  - Homepage Hero: reads heading, subheading, CTAs, stats from DB
+  - WhatsApp FAB: reads phone/whatsapp from DB
+- Built public blog: /blog (listing with category filter) + /blog/[slug] (detail with Markdown rendering, related posts, article schema).
+- Built CMS page rendering: /p/[slug] (renders DB-managed pages with Markdown content + hero).
+- Fixed routing conflict: [country] and [slug] can't coexist at same level — moved CMS pages to /p/[slug].
+- Agent Browser verified: login works, dashboard shows all 10 CMS nav items, Pages manager renders, Menus manager shows 7 header + 8 footer items from DB, homepage renders CMS-managed hero content.
+
+Stage Summary:
+- Lint: 0 errors. Production deployed and verified.
+- Admin can now manage: Pages, Blog Posts, Header Menu, Footer Menu, Hero Sections, Site Settings (brand/contact/social/footer), Projects, Case Studies, Leads.
+- Public site reads ALL header/footer/hero/settings content from Neon PostgreSQL.
+- Production: https://gulf-seismic-authority.vercel.app — CMS live.
+- Admin: https://gulf-seismic-authority.vercel.app/admin/login (admin@gulfseismic.com / gulf-seismic-2026)
