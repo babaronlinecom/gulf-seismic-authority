@@ -16,6 +16,8 @@ import {
   Layout,
   BookOpen,
   Globe,
+  Image as ImageIcon,
+  ClipboardList,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -25,10 +27,12 @@ const NAV = [
   { href: "/admin/leads", label: "Leads", icon: Users },
   { href: "/admin/pages", label: "Pages", icon: FileText },
   { href: "/admin/posts", label: "Blog Posts", icon: Newspaper },
-  { href: "/admin/menus", label: "Menus", icon: Menu },
-  { href: "/admin/hero", label: "Hero Sections", icon: Layout },
   { href: "/admin/projects", label: "Projects", icon: FolderKanban },
   { href: "/admin/case-studies", label: "Case Studies", icon: BookOpen },
+  { href: "/admin/menus", label: "Menus", icon: Menu },
+  { href: "/admin/hero", label: "Hero Sections", icon: Layout },
+  { href: "/admin/media", label: "Media Library", icon: ImageIcon },
+  { href: "/admin/forms", label: "Forms", icon: ClipboardList },
   { href: "/admin/site-settings", label: "Site Settings", icon: Globe },
   { href: "/admin/settings", label: "Account", icon: Settings },
 ];

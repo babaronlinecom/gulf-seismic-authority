@@ -291,3 +291,55 @@ model Section {
   @@index([page])
   @@index([status])
 }
+
+// ---------------------------------------------------------------------------
+// Media Library — image uploads and management
+// ---------------------------------------------------------------------------
+
+model MediaItem {
+  id        String   @id @default(cuid())
+  filename  String
+  url       String   // data URL or external URL
+  alt       String?
+  mimeType  String
+  size      Int      @default(0) // bytes
+  width     Int?
+  height    Int?
+  folder    String   @default("general")
+  createdAt DateTime @default(now())
+
+  @@index([folder])
+  @@index([createdAt])
+}
+
+// ---------------------------------------------------------------------------
+// Form Builder — custom forms with submissions
+// ---------------------------------------------------------------------------
+
+model Form {
+  id             String   @id @default(cuid())
+  name           String
+  slug           String   @unique
+  description    String?
+  fields         String   // JSON array of field definitions
+  submitLabel    String   @default("Submit")
+  successMessage String   @default("Thank you! We'll be in touch soon.")
+  emailTo        String?  // notification email
+  status         String   @default("active") // active | inactive
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([status])
+}
+
+model FormSubmission {
+  id        String   @id @default(cuid())
+  formId    String
+  data      String   // JSON object of field values
+  status    String   @default("new") // new | read | archived
+  createdAt DateTime @default(now())
+
+  @@index([formId])
+  @@index([status])
+  @@index([createdAt])
+}
