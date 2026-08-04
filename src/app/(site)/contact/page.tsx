@@ -74,8 +74,24 @@ export default function ContactPage() {
                     <MapPin className="h-5 w-5" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-sm">Head Office</h3>
+                    <h3 className="font-semibold text-sm">🇦🇪 UAE Office (HQ)</h3>
                     <p className="text-xs text-muted-foreground">{company.headquarters.address}</p>
+                    <p className="mt-1 text-xs text-muted-foreground">📞 {company.phone}</p>
+                    <p className="text-xs text-muted-foreground">📞 {company.phoneSecondary}</p>
+                  </div>
+                </div>
+              </Card>
+
+              <Card className="p-5">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                    <MapPin className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-sm">🇸🇦 KSA Office</h3>
+                    <p className="text-xs text-muted-foreground">{company.ksaAddress}</p>
+                    <p className="mt-1 text-xs text-muted-foreground">📞 {company.ksaPhone}</p>
+                    <a href={`mailto:${company.ksaEmail}`} className="text-xs text-amber-brand hover:underline">{company.ksaEmail}</a>
                   </div>
                 </div>
               </Card>
