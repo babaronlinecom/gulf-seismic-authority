@@ -18,10 +18,11 @@ export function Footer({ settings, menuItems }: FooterProps) {
           {/* Brand */}
           <div className="lg:col-span-2">
             <div className="flex items-center gap-2.5">
-              <div className="relative flex h-9 w-9 items-center justify-center overflow-hidden rounded-md bg-amber-brand">
-                <div className="absolute inset-0 road-stripe-h opacity-40" />
-                <span className="relative font-bold text-sm text-amber-foreground">{settings.logoText}</span>
-              </div>
+              <img
+                src={settings.logoUrl || "/logo.png"}
+                alt={`${settings.siteName} logo`}
+                className="h-10 w-auto object-contain"
+              />
               <div>
                 <div className="font-bold">{settings.siteName}</div>
                 <div className="text-[10px] uppercase tracking-widest text-primary-foreground/60">

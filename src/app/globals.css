@@ -173,6 +173,18 @@
   .text-balance {
     text-wrap: balance;
   }
+
+  .animate-scroll-rtl {
+    animation: scrollRightToLeft 40s linear infinite;
+  }
+  .animate-scroll-rtl:hover {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes scrollRightToLeft {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 /* Custom scrollbar for long lists */

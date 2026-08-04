@@ -26,12 +26,13 @@ export function Header({ settings, menuItems }: HeaderProps) {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/70">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Logo */}
+        {/* Logo — real Gulf Seismic logo */}
         <Link href="/" className="flex items-center gap-2.5 shrink-0">
-          <div className="relative flex h-9 w-9 items-center justify-center overflow-hidden rounded-md bg-primary">
-            <div className="absolute inset-0 road-stripe-h opacity-90" />
-            <span className="relative font-bold text-sm text-primary-foreground">{settings.logoText}</span>
-          </div>
+          <img
+            src={settings.logoUrl || "/logo.png"}
+            alt={`${settings.siteName} logo`}
+            className="h-10 w-auto object-contain"
+          />
           <div className="leading-tight">
             <div className="font-bold tracking-tight text-foreground">{settings.siteName}</div>
             <div className="text-[10px] uppercase tracking-widest text-muted-foreground">

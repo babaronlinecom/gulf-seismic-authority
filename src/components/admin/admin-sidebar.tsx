@@ -50,10 +50,7 @@ export function AdminSidebar({ userName, userRole }: { userName: string; userRol
     <aside className="flex h-screen w-64 flex-col border-r border-border bg-card">
       {/* Logo */}
       <div className="flex items-center gap-2.5 border-b border-border px-5 py-4">
-        <div className="relative flex h-9 w-9 items-center justify-center overflow-hidden rounded-md bg-primary">
-          <div className="absolute inset-0 road-stripe-h opacity-80" />
-          <span className="relative font-bold text-sm text-primary-foreground">GS</span>
-        </div>
+        <img src="/logo.png" alt="Gulf Seismic logo" className="h-9 w-auto object-contain" />
         <div className="leading-tight">
           <div className="font-bold text-sm">Gulf Seismic</div>
           <div className="text-[10px] uppercase tracking-widest text-muted-foreground">

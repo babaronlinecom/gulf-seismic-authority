@@ -9,6 +9,7 @@ import { IndustriesGrid } from "@/components/gulf/industries-grid";
 import { ProcessSection } from "@/components/gulf/process-section";
 import { CaseStudiesSection } from "@/components/gulf/case-studies-section";
 import { LeadCtaSection } from "@/components/gulf/lead-cta-section";
+import { TrustScroll } from "@/components/gulf/trust-scroll";
 import { Button } from "@/components/ui/button";
 import { company, services } from "@/lib/gulf-data";
 import { getSiteSettings, getHero } from "@/lib/cms";
@@ -23,17 +24,8 @@ export default async function Home() {
     <>
       <Hero hero={hero} settings={settings} />
 
-      {/* Trust strip */}
-      <section className="border-b border-border bg-background">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-8 gap-y-2 px-4 py-4 text-xs text-muted-foreground sm:px-6 lg:px-8">
-          {company.certifications.map((cert) => (
-            <span key={cert} className="flex items-center gap-1.5 font-medium">
-              <CheckCircle2 className="h-3.5 w-3.5 text-amber-brand" />
-              {cert}
-            </span>
-          ))}
-        </div>
-      </section>
+      {/* Trust strip — infinite right-to-left scroll */}
+      <TrustScroll />
 
       <ServicesGrid />
 

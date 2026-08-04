@@ -61,9 +61,21 @@ export function SiteSettingsManager() {
       {/* Brand */}
       <Card className="p-5">
         <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold"><Settings className="h-4 w-4 text-amber-brand" /> Brand</h3>
+        <div className="mb-4 flex items-center gap-4 rounded-lg border border-border bg-secondary/30 p-3">
+          {settings.logoUrl ? (
+            <img src={settings.logoUrl} alt="Logo preview" className="h-12 w-auto object-contain" />
+          ) : (
+            <div className="flex h-12 w-12 items-center justify-center rounded bg-muted text-xs text-muted-foreground">No logo</div>
+          )}
+          <div className="flex-1 space-y-1.5">
+            <Label>Logo URL</Label>
+            <Input value={settings.logoUrl || ""} onChange={(e) => update("logoUrl", e.target.value)} placeholder="/logo.png or https://..." />
+            <p className="text-xs text-muted-foreground">Upload to Media Library, then paste URL here. Updates header, footer, and admin.</p>
+          </div>
+        </div>
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-1.5"><Label>Site Name</Label><Input value={settings.siteName || ""} onChange={(e) => update("siteName", e.target.value)} /></div>
-          <div className="space-y-1.5"><Label>Logo Text</Label><Input value={settings.logoText || ""} onChange={(e) => update("logoText", e.target.value)} placeholder="GS" /></div>
+          <div className="space-y-1.5"><Label>Logo Text (fallback)</Label><Input value={settings.logoText || ""} onChange={(e) => update("logoText", e.target.value)} placeholder="GS" /></div>
         </div>
         <div className="mt-3 space-y-1.5"><Label>Tagline</Label><Input value={settings.tagline || ""} onChange={(e) => update("tagline", e.target.value)} /></div>
       </Card>

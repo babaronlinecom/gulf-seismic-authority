@@ -40,10 +40,7 @@ export default function AdminLoginPage() {
       <div className="absolute inset-x-0 top-0 h-1.5 road-stripe-h opacity-80" />
       <Card className="w-full max-w-md p-8">
         <div className="mb-6 flex items-center gap-3">
-          <div className="relative flex h-11 w-11 items-center justify-center overflow-hidden rounded-lg bg-primary">
-            <div className="absolute inset-0 road-stripe-h opacity-80" />
-            <span className="relative font-bold text-sm text-primary-foreground">GS</span>
-          </div>
+          <img src="/logo.png" alt="Gulf Seismic logo" className="h-12 w-auto object-contain" />
           <div>
             <h1 className="text-xl font-bold">Gulf Seismic Admin</h1>
             <p className="text-xs text-muted-foreground">Sign in to manage your website</p>
