@@ -11,6 +11,7 @@ export interface SiteSettings {
   siteName: string;
   tagline: string;
   logoText: string;
+  logoUrl: string;
   phone: string;
   whatsapp: string;
   email: string;
@@ -42,18 +43,19 @@ export interface HeroData {
 
 const DEFAULT_SETTINGS: SiteSettings = {
   siteName: "Gulf Seismic",
-  tagline: "The Gulf's Authority in Road & Industrial Marking",
+  tagline: "Precision. Safety. Quality.",
   logoText: "GS",
-  phone: "+971 4 000 0000",
-  whatsapp: "97150000000",
-  email: "info@gulfseismic.com",
-  address: "Dubai, United Arab Emirates",
+  logoUrl: "/logo.png",
+  phone: "+971 2 555 5769",
+  whatsapp: "971549970833",
+  email: "roadmarking@gulfseismic.com",
+  address: "P.O. Box 93187, Abu Dhabi, United Arab Emirates",
   linkedin: "https://www.linkedin.com/company/gulf-seismic",
   instagram: "https://www.instagram.com/gulfseismic",
   workingHours: "Sat–Thu, 08:00–18:00",
   footerAbout:
-    "Gulf Seismic is the UAE and Saudi Arabia authority for thermoplastic road marking, parking lot marking, warehouse marking, airport marking, industrial marking, safety signage and epoxy flooring.",
-  certifications: ["ISO 9001", "ICAO Annex 14", "OSHA / HSE", "RTA & MOMRA Compliant"],
+    "Gulf Seismic General Contracting L.L.C. is a leading road marking service provider based in Abu Dhabi, UAE, with operations across Saudi Arabia through Seismic Contracting Company LLC.",
+  certifications: ["ISO 9001:2015", "ISO 14001:2015", "ISO 45001:2018", "OSHA", "ADNOC Approved", "Aramco Approved"],
 };
 
 const DEFAULT_HEADER_MENU: MenuLink[] = [

@@ -132,8 +132,8 @@ export const countries: Country[] = [
     seoDescription:
       "Leading road marking company in UAE. Thermoplastic road marking, parking lot marking, warehouse marking, airport marking and epoxy flooring across Abu Dhabi, Dubai, Sharjah and all Emirates.",
     dialCode: "+971",
-    whatsapp: "97150000000",
-    phone: "+971 4 000 0000",
+    whatsapp: "971549970833",
+    phone: "+971 2 555 5769",
   },
   {
     slug: "saudi-arabia",
@@ -148,8 +148,8 @@ export const countries: Country[] = [
     seoDescription:
       "Saudi Arabia road marking contractor. Thermoplastic road marking, warehouse marking, airport marking and epoxy flooring in Riyadh, Jeddah, Dammam, Khobar, Jubail, Yanbu, Makkah and Madinah.",
     dialCode: "+966",
-    whatsapp: "966500000000",
-    phone: "+966 11 000 0000",
+    whatsapp: "966507657243",
+    phone: "+966 507 657 243",
   },
 ];
 
@@ -1477,35 +1477,123 @@ export const blogPosts: BlogPost[] = [
 
 export const company = {
   name: "Gulf Seismic",
-  legalName: "Gulf Seismic Contracting LLC",
-  tagline: "The Gulf's Authority in Road & Industrial Marking",
+  legalName: "Gulf Seismic General Contracting L.L.C.",
+  parentCompany: "FAST and Safe Trading LLC (est. 2013, Dubai)",
+  jvPartner: "Seismic Contracting Company LLC (KSA)",
+  tagline: "Precision. Safety. Quality.",
   description:
-    "Gulf Seismic is the UAE and Saudi Arabia authority for thermoplastic road marking, parking lot marking, warehouse marking, airport marking, industrial marking, safety signage and epoxy flooring — delivering municipal-spec quality across 16 cities.",
+    "Gulf Seismic General Contracting L.L.C. is a leading road marking service provider based in Abu Dhabi, UAE, with operations across Saudi Arabia through Seismic Contracting Company LLC. We specialize in delivering high-quality, durable, and compliant road marking solutions for roads, highways, parking areas, airports, and industrial facilities — using advanced machinery, premium materials, and a skilled workforce to meet international standards and local regulations.",
   url: "https://gulfseismic.com",
   cmsUrl: "https://cms.gulfseismic.com",
   frontendUrl: "https://gulf-seismic.vercel.app",
   graphqlEndpoint: "https://cms.gulfseismic.com/graphql",
-  email: "info@gulfseismic.com",
-  phone: "+971 4 000 0000",
-  whatsapp: "97150000000",
-  founded: 2015,
+  email: "roadmarking@gulfseismic.com",
+  emailSecondary: "admin@gulfseismic.com",
+  phone: "+971 2 555 5769",
+  phoneSecondary: "+971 54 997 0833",
+  phoneTertiary: "+971 54 447 2908",
+  whatsapp: "971549970833",
+  ksaPhone: "+966 507 657 243",
+  ksaEmail: "ahmed@seismiccoltd.com",
+  ksaAddress: "Office #405, 4th Floor, Old NCB Bank Building, Cross #18, Prince Thamar Street, King Abdulaziz Road, Al Khobar 31952, Saudi Arabia",
+  founded: 2018,
   headquarters: {
     country: "uae",
-    city: "Dubai",
-    address: "Dubai, United Arab Emirates",
+    city: "Abu Dhabi",
+    address: "P.O. Box 93187, Abu Dhabi, United Arab Emirates",
   },
   stats: [
-    { label: "Cities served", value: "16" },
-    { label: "km of lines applied", value: "2,400+" },
-    { label: "Projects delivered", value: "850+" },
-    { label: "Years in the Gulf", value: "10" },
+    { label: "UAE + KSA Coverage", value: "2" },
+    { label: "Years of Experience", value: "7+" },
+    { label: "Services", value: "12+" },
+    { label: "Industry Clients", value: "15+" },
   ],
-  certifications: ["ISO 9001", "ICAO Annex 14", "OSHA / HSE", "RTA & MOMRA Compliant"],
+  certifications: [
+    "ISO 9001:2015",
+    "ISO 14001:2015",
+    "ISO 45001:2018",
+    "OSHA Compliance",
+    "HABC Fire Safety",
+    "IOSH Managing Safety",
+    "Abu Dhabi Municipality Approval",
+    "ADNOC Approved Vendor",
+    "Aramco Approved Supplier",
+    "Saber Certificate",
+    "NCEC Certificate",
+    "Saudi Contractors Authority (SCA) Registration",
+    "ZATCA Registration",
+    "Chamber of Commerce Membership",
+    "Saudi Made Certificate",
+    "National Safety Council (NSC) Membership",
+  ],
+  approvals: [
+    "Abu Dhabi Municipality — Approved Road Marking Contractor",
+    "ADNOC — Approved Vendor (ADNOC & Group Companies)",
+    "Aramco — Approved Supplier (Aramco & Group Companies)",
+    "Saber Certificate — Product Conformity",
+    "NCEC Certificate — Conformity Assessment",
+  ],
   social: {
     linkedin: "https://www.linkedin.com/company/gulf-seismic",
     instagram: "https://www.instagram.com/gulfseismic",
+    facebook: "https://www.facebook.com/profile.php?id=100069905453894",
   },
 };
+
+// Real materials from company profile
+export const materials = [
+  { name: "Heavy Duty Cat Eye", description: "High visibility and heavy duty cat eyes for long lasting performance.", icon: "Eye" },
+  { name: "RPM Reflective Tag", description: "Raised pavement markers with reflective face for enhanced visibility.", icon: "Circle" },
+  { name: "Fixing Material", description: "High-quality fixing materials for secure and durable installation.", icon: "Wrench" },
+  { name: "Uni-Direction Stud", description: "Channels traffic in one direction with enhanced safety.", icon: "ArrowRight" },
+  { name: "Prismatic Cat Eye", description: "Prismatic reflectors for superior brightness and long visibility.", icon: "Eye" },
+  { name: "Epoxy", description: "High performance epoxy for road studs and marker installation.", icon: "Layers" },
+  { name: "Bi-Direction Stud", description: "Provides visibility from both directions for maximum safety.", icon: "ArrowLeftRight" },
+  { name: "Glass Beads", description: "Premium quality glass beads for better retro-reflectivity.", icon: "Circle" },
+  { name: "Chem Button", description: "Chemical road studs for strong adhesion and long life.", icon: "Circle" },
+  { name: "EBond Epoxy (A+B)", description: "High strength epoxy adhesive for permanent bonding and durability.", icon: "Layers" },
+  { name: "MMA Road Marking", description: "High durability MMA road marking for long lasting lines.", icon: "Flame" },
+  { name: "Moveable Crash Barriers", description: "Temporary crash barriers for road safety and traffic management.", icon: "ShieldAlert" },
+  { name: "Barriers", description: "Plastic and concrete barriers for safety and site protection.", icon: "ShieldAlert" },
+  { name: "Sandblasting", description: "Surface preparation by sandblasting for better adhesion.", icon: "Wind" },
+  { name: "Safety Sign Board", description: "Reflective safety sign boards for traffic control and guidance.", icon: "ShieldAlert" },
+  { name: "Euro Barriers", description: "Durable euro barriers for road and site safety.", icon: "ShieldAlert" },
+  { name: "Ceramic Studs", description: "High-quality ceramic studs for superior visibility and life.", icon: "Circle" },
+  { name: "Reflective Studs", description: "Reflective studs for better night-time visibility.", icon: "Circle" },
+  { name: "Milling Removal Asphalt", description: "Efficient removal of old markings and asphalt surfaces.", icon: "Trash2" },
+];
+
+// Real machinery/equipment from company profile
+export const equipment = [
+  { name: "Thermoplastic Road Marking Machine", description: "High-performance thermoplastic road marking machines for durable and precisely applied markings." },
+  { name: "Cold Paint Road Marking Machine", description: "Efficient cold paint marking machines ideal for temporary and short-term line applications." },
+  { name: "Pre-Marking Machine", description: "Ensures accurate layout and alignment before marking for perfect results every time." },
+  { name: "Glass Bead Dispenser", description: "Precision glass bead dispensers for enhanced retro-reflectivity and road safety." },
+  { name: "Road Sweeper", description: "Powerful sweepers ensure clean surfaces for better adhesion and marking quality." },
+  { name: "Arrow Board Truck", description: "Mobile arrow board systems for safe traffic management and work zone protection." },
+  { name: "Line Removal Machine", description: "Specialized machines for safe and efficient removal of old road markings." },
+  { name: "High Pressure Washer", description: "High-pressure washers for surface cleaning and preparation before marking." },
+  { name: "Retro-Reflectometer", description: "Advanced reflectometers to measure visibility and ensure quality compliance." },
+];
+
+// Real clients from company profile
+export const clients = [
+  { name: "Citiscape", type: "Landscaping & Road Marking" },
+  { name: "Al Asab Est.", type: "Gen. Transport & Contracting" },
+  { name: "TechnicalCore", type: "General Contracting L.L.C." },
+  { name: "TCC (Al Kamal)", type: "General Contracting" },
+  { name: "ISGC", type: "Inventive Strategy General Contracting" },
+  { name: "Department of Transport (DoT)", type: "Government — Abu Dhabi" },
+  { name: "China State Construction (CSCEC)", type: "International Construction" },
+  { name: "NCC", type: "Nael Construction & Contracting" },
+  { name: "Bin Hafeez Gen. Cont. L.L.C.", type: "General Contracting" },
+  { name: "Yas Marina Circuit", type: "Motorsport & Events" },
+  { name: "ADNOC Drilling", type: "Oil & Gas — ADNOC Group" },
+  { name: "FSDECO", type: "Field Services & Drilling Equipment Co." },
+  { name: "Transatlas", type: "Construction & Contracting" },
+  { name: "SpeedOne", type: "General Maintenance" },
+  { name: "ADNOC Distribution", type: "Oil & Gas — ADNOC Group" },
+];
 
 // ---------------------------------------------------------------------------
 // LOOKUP HELPERS
