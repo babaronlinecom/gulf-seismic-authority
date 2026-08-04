@@ -308,6 +308,11 @@ function MediaEditor({ item, onClose, onUpdate }: { item: MediaItem; onClose: ()
     setForm((prev) => ({ ...prev, [field]: value }));
   }
 
+  async function copyUrl(url: string, id: string) {
+    await navigator.clipboard.writeText(url);
+    toast({ title: "URL copied to clipboard" });
+  }
+
   const seoComplete = !!(form.seoTitle && form.seoAlt);
   const socialComplete = !!(form.ogTitle && form.socialCaption);
 

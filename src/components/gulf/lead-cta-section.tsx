@@ -5,8 +5,21 @@ import { Phone, MessageCircle, Mail, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { company } from "@/lib/gulf-data";
 import { LeadForm } from "./lead-form";
+import type { CountrySlug } from "@/lib/gulf-data";
 
-export function LeadCtaSection() {
+interface LeadCtaSectionProps {
+  defaultService?: string;
+  defaultCountry?: CountrySlug;
+  defaultCity?: string;
+  source?: string;
+}
+
+export function LeadCtaSection({
+  defaultService,
+  defaultCountry,
+  defaultCity,
+  source = "homepage-cta",
+}: LeadCtaSectionProps = {}) {
   return (
     <section id="quote" className="bg-secondary py-16 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -100,7 +113,12 @@ export function LeadCtaSection() {
             viewport={{ once: true }}
             transition={{ duration: 0.4 }}
           >
-            <LeadForm source="homepage-cta" />
+            <LeadForm
+              defaultService={defaultService}
+              defaultCountry={defaultCountry}
+              defaultCity={defaultCity}
+              source={source}
+            />
           </motion.div>
         </div>
       </div>

@@ -37,7 +37,7 @@ export function WhatsAppFab({ whatsapp, phone }: { whatsapp: string; phone: stri
             </p>
             <div className="flex flex-col gap-2">
               <a
-                href={`https://wa.me/${company.whatsapp}?text=Hello%20Gulf%20Seismic,%20I%20would%20like%20a%20quote%20for%20road%20marking.`}
+                href={`https://wa.me/${whatsapp}?text=Hello%20Gulf%20Seismic,%20I%20would%20like%20a%20quote%20for%20road%20marking.`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 rounded-md bg-[#25D366] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#1da851]"
@@ -46,11 +46,11 @@ export function WhatsAppFab({ whatsapp, phone }: { whatsapp: string; phone: stri
                 WhatsApp Us
               </a>
               <a
-                href={`tel:${company.phone.replace(/\s/g, "")}`}
+                href={`tel:${phone.replace(/\s/g, "")}`}
                 className="flex items-center justify-center gap-2 rounded-md border border-border px-4 py-2.5 text-sm font-semibold hover:bg-accent"
               >
                 <Phone className="h-4 w-4" />
-                Call {company.phone}
+                Call {phone}
               </a>
             </div>
           </div>

@@ -1,7 +1,14 @@
-import { redirect } from "next/navigation";
+import type { Metadata } from "next";
 import { getAdminSession } from "@/lib/admin-session";
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
 import { SessionProvider } from "@/components/admin/session-provider";
+import type { Session } from "next-auth";
+
+// Admin pages should NEVER be indexed by search engines
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+  title: "Admin — Gulf Seismic",
+};
 
 export default async function AdminLayout({
   children,
@@ -9,11 +16,10 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }) {
   const session = await getAdminSession();
+  const nextAuthSession: Session | null = session as unknown as Session | null;
 
-  // Login page is the only admin route that doesn't require auth
-  // (handled by the page itself). All others require a session.
   return (
-    <SessionProvider session={session}>
+    <SessionProvider session={nextAuthSession}>
       <div className="flex min-h-screen bg-background">
         {session ? (
           <AdminSidebar

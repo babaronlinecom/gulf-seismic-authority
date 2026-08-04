@@ -11,6 +11,7 @@ import {
   countries,
 } from "@/lib/gulf-data";
 import { allProjects } from "@/lib/gulf-content-merged";
+import { db } from "@/lib/db";
 import { DynamicIcon } from "@/components/gulf/dynamic-icon";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { projectCollectionSchema } from "@/lib/aeo-geo";
@@ -37,10 +38,39 @@ export const metadata: Metadata = buildMetadata({
 });
 
 export default async function ProjectsPage() {
-  // Use merged seed data (50 projects) at build time.
-  // ISR (revalidate=300) will fetch live CMS data at runtime.
-  const projectCount = allProjects.length;
-  const displayProjects = allProjects;
+  // Read from DB (admin-managed) with seed fallback for build safety
+  let displayProjects: typeof allProjects = allProjects;
+  try {
+    const dbProjects = await db.projectRecord.findMany({
+      where: { status: "published" },
+      orderBy: { createdAt: "desc" },
+    });
+    if (dbProjects.length > 0) {
+      displayProjects = dbProjects.map((p) => ({
+        slug: p.slug,
+        title: p.title,
+        country: p.country as any,
+        city: p.city || "",
+        service: p.service || "",
+        industry: p.industry || "",
+        client: p.client || "",
+        year: p.year || new Date().getFullYear(),
+        duration: p.duration || "",
+        challenge: p.challenge || "",
+        solution: p.solution || "",
+        execution: p.execution || "",
+        materials: p.materials ? JSON.parse(p.materials) : [],
+        equipment: p.equipment ? JSON.parse(p.equipment) : [],
+        results: p.results ? JSON.parse(p.results) : [],
+        gallery: [],
+        location: p.location || "",
+        area: p.area || "",
+      })) as typeof allProjects;
+    }
+  } catch {
+    // Fallback to seed data if DB is unreachable
+  }
+  const projectCount = displayProjects.length;
 
   return (
     <>
