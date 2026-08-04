@@ -17,10 +17,12 @@ import {
 } from "@/lib/gulf-data";
 import { DynamicIcon } from "@/components/gulf/dynamic-icon";
 import {
-  buildMetadata,
+  buildSeoMetadata,
   organizationSchema,
   breadcrumbSchema,
   localBusinessSchema,
+  getDbFaqs,
+  faqSchema,
 } from "@/lib/seo";
 
 const COUNTRIES: CountrySlug[] = ["uae", "saudi-arabia"];
@@ -43,11 +45,10 @@ export async function generateMetadata({
   const { country, city } = await params;
   const c = countries.find((x) => x.slug === country);
   const ct = cities.find((x) => x.slug === city && x.country === country);
-  if (!c || !ct) return buildMetadata({ title: "Not Found", description: "", noIndex: true });
-  return buildMetadata({
-    title: ct.seoTitle,
-    description: ct.seoDescription,
+  if (!c || !ct) return { title: "Not Found", robots: { index: false, follow: false } };
+  return await buildSeoMetadata({
     path: `/${c.slug}/${ct.slug}`,
+    defaults: { title: ct.seoTitle, description: ct.seoDescription },
   });
 }
 

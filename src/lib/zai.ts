@@ -128,6 +128,7 @@ export async function zaiVision(prompt: string, imageUrl: string): Promise<strin
   if (hasSdkConfig()) {
     const zai = await getSdk();
     const response = await zai.chat.completions.createVision({
+      model: "glm-4v",
       messages: [
         {
           role: "user",

@@ -25,11 +25,12 @@ import {
   generateCityServiceMeta,
 } from "@/lib/programmatic-content";
 import {
-  buildMetadata,
+  buildSeoMetadata,
   organizationSchema,
   breadcrumbSchema,
   localBusinessSchema,
   faqSchema,
+  getDbFaqs,
 } from "@/lib/seo";
 import { aeoBundle } from "@/lib/aeo-geo";
 import { LocalBusinessSignals } from "@/components/gulf/local-business-signals";
@@ -58,12 +59,11 @@ export async function generateMetadata({
   const ct = cities.find((x) => x.slug === city && x.country === country);
   const s = services.find((x) => x.slug === service);
   if (!c || !ct || !s)
-    return buildMetadata({ title: "Not Found", description: "", noIndex: true });
+    return { title: "Not Found", robots: { index: false, follow: false } };
   const meta = generateCityServiceMeta(ct, s);
-  return buildMetadata({
-    title: meta.title,
-    description: meta.description,
+  return await buildSeoMetadata({
     path: `/${c.slug}/${ct.slug}/${s.slug}`,
+    defaults: { title: meta.title, description: meta.description },
   });
 }
 
@@ -81,7 +81,7 @@ export default async function CityServicePage({
   const path = `/${c.slug}/${ct.slug}/${s.slug}`;
   const intro = generateCityServiceIntro(ct, s, c);
   const body = generateCityServiceBody(ct, s, c);
-  const faqs = generateCityServiceFaqs(ct, s, c);
+  const faqs = [...generateCityServiceFaqs(ct, s, c), ...await getDbFaqs(path)];
   // Use merged projects (50 total) — city projects for this service
   const cityProjects = allProjects
     .filter((p) => p.city === ct.slug && p.service === s.slug)

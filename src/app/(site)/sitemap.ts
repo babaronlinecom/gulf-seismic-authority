@@ -10,7 +10,10 @@ import {
 } from "@/lib/gulf-data";
 import { allProjects, allCaseStudies } from "@/lib/gulf-content-merged";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+// ISR: revalidate sitemap every 5 minutes to pick up new CMS pages
+export const revalidate = 300;
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = company.url;
   const now = new Date();
 
@@ -80,6 +83,42 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
+  // Blog listing + seed posts
+  const blogPages: MetadataRoute.Sitemap = [
+    { url: `${base}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
+    ...blogPosts.map((post) => ({
+      url: `${base}/blog/${post.slug}`,
+      lastModified: now,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    })),
+  ];
+
+  // Dynamic CMS pages from DB (admin-managed pages at /p/[slug])
+  let cmsPages: MetadataRoute.Sitemap = [];
+  let dbBlogPosts: MetadataRoute.Sitemap = [];
+  try {
+    const { db } = await import("@/lib/db");
+    const [pages, posts] = await Promise.all([
+      db.page.findMany({ where: { status: "published" }, select: { slug: true, updatedAt: true } }),
+      db.post.findMany({ where: { status: "published" }, select: { slug: true, publishedAt: true } }),
+    ]);
+    cmsPages = pages.map((p) => ({
+      url: `${base}/p/${p.slug}`,
+      lastModified: p.updatedAt,
+      changeFrequency: "monthly" as const,
+      priority: 0.5,
+    }));
+    dbBlogPosts = posts.map((p) => ({
+      url: `${base}/blog/${p.slug}`,
+      lastModified: p.publishedAt,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    }));
+  } catch {
+    // DB unreachable — use seed data only
+  }
+
   return [
     ...staticPages,
     ...countryPages,
@@ -89,5 +128,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...industryPages,
     ...projectPages,
     ...caseStudyPages,
+    ...blogPages,
+    ...cmsPages,
+    ...dbBlogPosts,
   ];
 }

@@ -17,9 +17,11 @@ import {
   type CountrySlug,
 } from "@/lib/gulf-data";
 import {
-  buildMetadata,
+  buildSeoMetadata,
   organizationSchema,
   breadcrumbSchema,
+  getDbFaqs,
+  faqSchema,
 } from "@/lib/seo";
 
 const COUNTRIES: CountrySlug[] = ["uae", "saudi-arabia"];
@@ -35,11 +37,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { country } = await params;
   const c = countries.find((x) => x.slug === country);
-  if (!c) return buildMetadata({ title: "Not Found", description: "", noIndex: true });
-  return buildMetadata({
-    title: c.seoTitle,
-    description: c.seoDescription,
+  if (!c) return { title: "Not Found", robots: { index: false, follow: false } };
+  return await buildSeoMetadata({
     path: `/${c.slug}`,
+    defaults: { title: c.seoTitle, description: c.seoDescription },
   });
 }
 

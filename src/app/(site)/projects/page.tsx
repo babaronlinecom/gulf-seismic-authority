@@ -13,7 +13,7 @@ import {
 import { allProjects } from "@/lib/gulf-content-merged";
 import { db } from "@/lib/db";
 import { DynamicIcon } from "@/components/gulf/dynamic-icon";
-import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
+import { buildSeoMetadata, breadcrumbSchema, getDbFaqs, faqSchema } from "@/lib/seo";
 import { projectCollectionSchema } from "@/lib/aeo-geo";
 
 // Map project slugs to their generated images
@@ -30,12 +30,15 @@ const projectImageMap: Record<string, string> = {
 // but uses seed data during build to avoid CMS fetch during SSG)
 export const revalidate = 300;
 
-export const metadata: Metadata = buildMetadata({
-  title: "Marking Projects Portfolio | Road, Parking, Warehouse, Airport Case Studies",
-  description:
-    "Browse Gulf Seismic's delivered marking projects across UAE and Saudi Arabia — highways, malls, warehouses, plants and airports with real results.",
-  path: "/projects",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  return await buildSeoMetadata({
+    path: "/projects",
+    defaults: {
+      title: "Marking Projects Portfolio | Road, Parking, Warehouse, Airport Case Studies",
+      description: "Browse Gulf Seismic's delivered marking projects across UAE and Saudi Arabia — highways, malls, warehouses, plants and airports with real results.",
+    },
+  });
+}
 
 export default async function ProjectsPage() {
   // Read from DB (admin-managed) with seed fallback for build safety

@@ -15,10 +15,19 @@ import {
   countries,
 } from "@/lib/gulf-data";
 import { allProjects, allCaseStudies } from "@/lib/gulf-content-merged";
-import { buildMetadata, breadcrumbSchema, projectSchema } from "@/lib/seo";
+import { buildSeoMetadata, breadcrumbSchema, projectSchema } from "@/lib/seo";
+import { db } from "@/lib/db";
+
+export const revalidate = 300;
 
 export async function generateStaticParams() {
-  return allProjects.map((p) => ({ slug: p.slug }));
+  // Include both seed and DB projects for SSG
+  let dbSlugs: { slug: string }[] = [];
+  try {
+    dbSlugs = await db.projectRecord.findMany({ where: { status: "published" }, select: { slug: true } });
+  } catch {}
+  const allSlugs = new Set([...allProjects.map((p) => p.slug), ...dbSlugs.map((p) => p.slug)]);
+  return Array.from(allSlugs).map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -28,11 +37,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const p = allProjects.find((x) => x.slug === slug);
-  if (!p) return buildMetadata({ title: "Not Found", description: "", noIndex: true });
-  return buildMetadata({
-    title: `${p.title} | Case Study`,
-    description: p.challenge.slice(0, 160),
+  if (!p) return { title: "Not Found", robots: { index: false, follow: false } };
+  return await buildSeoMetadata({
     path: `/projects/${p.slug}`,
+    defaults: { title: `${p.title} | Case Study`, description: p.challenge.slice(0, 160) },
   });
 }
 
@@ -42,7 +50,25 @@ export default async function ProjectPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const p = allProjects.find((x) => x.slug === slug);
+  // Try DB first, fall back to seed
+  let p = allProjects.find((x) => x.slug === slug);
+  try {
+    const dbProject = await db.projectRecord.findUnique({ where: { slug } });
+    if (dbProject && dbProject.status === "published") {
+      p = {
+        slug: dbProject.slug, title: dbProject.title,
+        country: dbProject.country as any, city: dbProject.city || "",
+        service: dbProject.service || "", industry: dbProject.industry || "",
+        client: dbProject.client || "", year: dbProject.year || new Date().getFullYear(),
+        duration: dbProject.duration || "", challenge: dbProject.challenge || "",
+        solution: dbProject.solution || "", execution: dbProject.execution || "",
+        materials: dbProject.materials ? JSON.parse(dbProject.materials) : [],
+        equipment: dbProject.equipment ? JSON.parse(dbProject.equipment) : [],
+        results: dbProject.results ? JSON.parse(dbProject.results) : [],
+        gallery: [], location: dbProject.location || "", area: dbProject.area || "",
+      } as typeof p;
+    }
+  } catch {}
   if (!p) notFound();
 
   const path = `/projects/${p.slug}`;

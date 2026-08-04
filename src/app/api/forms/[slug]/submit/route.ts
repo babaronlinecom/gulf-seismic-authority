@@ -1,8 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
-/** POST /api/forms/[slug]/submit — public form submission */
+/** POST /api/forms/[slug]/submit — public form submission (rate limited) */
 export async function POST(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
+  // Rate limiting: 5 submissions per minute per IP
+  const ip = getClientIp(req);
+  const rateLimit = checkRateLimit(ip);
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      { error: "Too many submissions. Please try again in a minute." },
+      { status: 429, headers: { "Retry-After": "60" } }
+    );
+  }
+
   const { slug } = await params;
   const form = await db.form.findUnique({ where: { slug } });
   if (!form || form.status !== "active") {

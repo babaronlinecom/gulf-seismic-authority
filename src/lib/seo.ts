@@ -228,3 +228,89 @@ export function buildMetadata(opts: {
 export function buildBreadcrumbs(items: { name: string; url: string }[]) {
   return items;
 }
+
+// ---------------------------------------------------------------------------
+// DB-POWERED METADATA — reads SeoProfile from the database
+// ---------------------------------------------------------------------------
+
+/**
+ * Build Metadata using DB-stored SeoProfile (admin-managed) with fallback
+ * to hardcoded defaults. This makes admin SEO edits reflect on the live site.
+ *
+ * Usage in generateMetadata:
+ *   return await buildSeoMetadata({ path: "/services/road-marking", defaults: { title: "...", description: "..." } });
+ */
+export async function buildSeoMetadata(opts: {
+  path: string;
+  defaults: { title: string; description: string; image?: string };
+}): Promise<Metadata> {
+  let dbProfile: {
+    metaTitle: string | null;
+    metaDescription: string | null;
+    canonicalUrl: string | null;
+    robotsIndex: boolean;
+    robotsFollow: boolean;
+    ogTitle: string | null;
+    ogDescription: string | null;
+    ogImage: string | null;
+    focusKeyword: string | null;
+  } | null = null;
+
+  try {
+    const { db } = await import("./db");
+    dbProfile = await db.seoProfile.findUnique({ where: { pageUrl: opts.path } });
+  } catch {
+    // DB unreachable — use defaults
+  }
+
+  const title = dbProfile?.metaTitle || opts.defaults.title;
+  const description = dbProfile?.metaDescription || opts.defaults.description;
+  const canonical = dbProfile?.canonicalUrl || absoluteUrl(opts.path);
+  const ogTitle = dbProfile?.ogTitle || title;
+  const ogDescription = dbProfile?.ogDescription || description;
+  const ogImage = dbProfile?.ogImage || opts.defaults.image || "/images/og/default-og.jpg";
+  const robotsIndex = dbProfile?.robotsIndex ?? true;
+  const robotsFollow = dbProfile?.robotsFollow ?? true;
+
+  return {
+    title,
+    description,
+    alternates: { canonical },
+    robots: robotsIndex
+      ? { index: true, follow: robotsFollow }
+      : { index: false, follow: false },
+    openGraph: {
+      title: ogTitle,
+      description: ogDescription,
+      url: canonical,
+      siteName: company.name,
+      type: "website",
+      images: [{ url: ogImage, width: 1344, height: 768, alt: ogTitle }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: ogTitle,
+      description: ogDescription,
+      images: [ogImage],
+    },
+  };
+}
+
+/**
+ * Fetch FAQ clusters from the DB for a given page URL.
+ * Returns an array of {question, answer} for FAQPage schema injection.
+ * Falls back to empty array if DB is unreachable.
+ */
+export async function getDbFaqs(pageUrl: string): Promise<{ question: string; answer: string }[]> {
+  try {
+    const { db } = await import("./db");
+    const faqs = await db.faqCluster.findMany({
+      where: { pageUrl, status: "published" },
+      select: { question: true, answer: true },
+      take: 20,
+    });
+    return faqs.map((f) => ({ question: f.question, answer: f.answer }));
+  } catch {
+    return [];
+  }
+}

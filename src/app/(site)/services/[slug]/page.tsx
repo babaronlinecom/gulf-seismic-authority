@@ -17,11 +17,12 @@ import {
 } from "@/lib/gulf-data";
 import { DynamicIcon } from "@/components/gulf/dynamic-icon";
 import {
-  buildMetadata,
+  buildSeoMetadata,
   organizationSchema,
   breadcrumbSchema,
   serviceSchema,
   faqSchema,
+  getDbFaqs,
 } from "@/lib/seo";
 
 export async function generateStaticParams() {
@@ -35,11 +36,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const s = services.find((x) => x.slug === slug);
-  if (!s) return buildMetadata({ title: "Not Found", description: "", noIndex: true });
-  return buildMetadata({
-    title: s.seoTitle,
-    description: s.seoDescription,
+  if (!s) return { title: "Not Found", robots: { index: false, follow: false } };
+  return await buildSeoMetadata({
     path: `/services/${s.slug}`,
+    defaults: { title: s.seoTitle, description: s.seoDescription },
   });
 }
 
@@ -55,6 +55,8 @@ export default async function ServicePage({
   const path = `/services/${s.slug}`;
   const serviceIndustries = industries.filter((i) => s.industriesServed.includes(i.slug));
   const serviceProjects = getProjectsByService(s.slug);
+  const dbFaqs = await getDbFaqs(path);
+  const allFaqs = [...s.faqs, ...dbFaqs];
 
   return (
     <>
@@ -67,7 +69,7 @@ export default async function ServicePage({
             { name: "Services", url: "/services/road-marking" },
             { name: s.name, url: path },
           ]),
-          faqSchema(s.faqs),
+          faqSchema(allFaqs),
         ]}
       />
       <PageHero

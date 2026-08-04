@@ -9,10 +9,18 @@ import { Button } from "@/components/ui/button";
 import { JsonLd } from "@/components/gulf/json-ld";
 import { getProject, cities, countries, type Project } from "@/lib/gulf-data";
 import { allCaseStudies, allProjects } from "@/lib/gulf-content-merged";
-import { buildMetadata, breadcrumbSchema, articleSchema } from "@/lib/seo";
+import { buildSeoMetadata, breadcrumbSchema, articleSchema } from "@/lib/seo";
+import { db } from "@/lib/db";
+
+export const revalidate = 300;
 
 export async function generateStaticParams() {
-  return allCaseStudies.map((cs) => ({ slug: cs.slug }));
+  let dbSlugs: { slug: string }[] = [];
+  try {
+    dbSlugs = await db.caseStudyRecord.findMany({ where: { status: "published" }, select: { slug: true } });
+  } catch {}
+  const allSlugs = new Set([...allCaseStudies.map((cs) => cs.slug), ...dbSlugs.map((cs) => cs.slug)]);
+  return Array.from(allSlugs).map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -22,11 +30,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const cs = allCaseStudies.find((x) => x.slug === slug);
-  if (!cs) return buildMetadata({ title: "Not Found", description: "", noIndex: true });
-  return buildMetadata({
-    title: `${cs.title} | Case Study`,
-    description: cs.summary,
+  if (!cs) return { title: "Not Found", robots: { index: false, follow: false } };
+  return await buildSeoMetadata({
     path: `/case-studies/${cs.slug}`,
+    defaults: { title: `${cs.title} | Case Study`, description: cs.summary },
   });
 }
 
@@ -36,7 +43,20 @@ export default async function CaseStudyPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const cs = allCaseStudies.find((x) => x.slug === slug);
+  // Try DB first, fall back to seed
+  let cs = allCaseStudies.find((x) => x.slug === slug);
+  try {
+    const dbCs = await db.caseStudyRecord.findUnique({ where: { slug } });
+    if (dbCs && dbCs.status === "published") {
+      const hasT = dbCs.testimonialQuote && dbCs.testimonialAuthor;
+      cs = {
+        slug: dbCs.slug, title: dbCs.title, projectSlug: dbCs.projectSlug || "",
+        summary: dbCs.summary,
+        outcomes: dbCs.outcomes ? JSON.parse(dbCs.outcomes) : [],
+        testimonial: hasT ? { quote: dbCs.testimonialQuote!, author: dbCs.testimonialAuthor!, role: dbCs.testimonialRole || "" } : null,
+      } as typeof cs;
+    }
+  } catch {}
   if (!cs) notFound();
 
   const path = `/case-studies/${cs.slug}`;

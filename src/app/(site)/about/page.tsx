@@ -1,18 +1,21 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { CheckCircle2, Target, Eye, Award, MapPin } from "lucide-react";
-import type { Metadata } from "next";
 import { PageHero } from "@/components/gulf/page-hero";
 import { Card } from "@/components/ui/card";
 import { JsonLd } from "@/components/gulf/json-ld";
 import { company, services, countries } from "@/lib/gulf-data";
-import { buildMetadata, breadcrumbSchema, organizationSchema } from "@/lib/seo";
+import { buildSeoMetadata, breadcrumbSchema, organizationSchema } from "@/lib/seo";
 
-export const metadata: Metadata = buildMetadata({
-  title: "About Gulf Seismic | Road & Industrial Marking Authority",
-  description:
-    "Gulf Seismic is the UAE and Saudi Arabia authority for road marking, parking marking, warehouse marking, airport marking, industrial marking, safety signage and epoxy flooring. 10+ years, 850+ projects, 16 cities.",
-  path: "/about",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  return await buildSeoMetadata({
+    path: "/about",
+    defaults: {
+      title: "About Gulf Seismic | Road & Industrial Marking Authority",
+      description: "Gulf Seismic is the UAE and Saudi Arabia authority for road marking, parking marking, warehouse marking, airport marking, industrial marking, safety signage and epoxy flooring. 10+ years, 850+ projects, 16 cities.",
+    },
+  });
+}
 
 export default function AboutPage() {
   return (

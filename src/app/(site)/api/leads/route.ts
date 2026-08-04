@@ -1,12 +1,31 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 /**
  * POST /api/leads
  * Captures a lead from any funnel (RFQ, WhatsApp, Call, Contact, Tender).
  * Computes a lead score based on data completeness and intent signals.
+ * Rate limited: 5 requests per minute per IP.
  */
 export async function POST(req: NextRequest) {
+  // Rate limiting
+  const ip = getClientIp(req);
+  const rateLimit = checkRateLimit(ip);
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      { ok: false, error: "Too many requests. Please try again in a minute." },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(Math.ceil((rateLimit.resetAt - Date.now()) / 1000)),
+          "X-RateLimit-Remaining": "0",
+          "X-RateLimit-Reset": String(rateLimit.resetAt),
+        },
+      }
+    );
+  }
+
   try {
     const body = await req.json();
 
