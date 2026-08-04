@@ -20,6 +20,7 @@ import {
   ClipboardList,
   TrendingUp,
   Crosshair,
+  LayoutPanelTop,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,7 @@ const NAV = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/leads", label: "Leads", icon: Users },
   { href: "/admin/pages", label: "Pages", icon: FileText },
+  { href: "/admin/page-builder", label: "Page Builder", icon: LayoutPanelTop },
   { href: "/admin/posts", label: "Blog Posts", icon: Newspaper },
   { href: "/admin/projects", label: "Projects", icon: FolderKanban },
   { href: "/admin/case-studies", label: "Case Studies", icon: BookOpen },

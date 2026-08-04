@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { RichTextEditor } from "@/components/admin/rich-text-editor";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -172,8 +173,8 @@ export function PagesManager() {
             </div>
 
             <div className="space-y-1.5">
-              <Label>Content (Markdown / HTML)</Label>
-              <Textarea value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })} rows={8} className="font-mono text-xs" placeholder="<p>Page content...</p>" />
+              <Label>Content</Label>
+              <RichTextEditor value={form.content} onChange={(html) => setForm({ ...form, content: html })} placeholder="Start writing page content..." />
             </div>
 
             <div className="rounded-lg border border-border bg-secondary/30 p-3">

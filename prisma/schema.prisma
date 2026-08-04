@@ -471,3 +471,16 @@ model OptimizationSnapshot {
 
   @@index([createdAt])
 }
+
+/// Block-based Page Builder — stores JSON blocks for visual page composition
+model PageBuilder {
+  id          String   @id @default(cuid())
+  pageSlug    String   @unique
+  title       String
+  blocks      String   // JSON array of block definitions
+  status      String   @default("draft") // draft | published
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([status])
+}
